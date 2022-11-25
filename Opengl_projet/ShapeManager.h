@@ -1,7 +1,7 @@
 #include <vector>
-#include "ThreeDimensionalFigure.h"
 #include "Camera.h"
 #include "Shader.h"
+#include "Box.h"
 
 using namespace std;
 
@@ -10,13 +10,11 @@ class ShapeManager
 private:
 	static ShapeManager* drawingManager;
 	ShapeManager();
-	vector<ThreeDimensionalFigure*> threeDimensionFigures;
+	vector<Box*> boxes;
 	Shader* basic2DShader;
 	Shader* basic3DShader;
-	int polygonNumber;
-	int threeDimensionalFigureNumber;
-	int selectedPolygonIndex;
-	int selectedThreeDimensionalFigureIndex;
+	int boxNumber;
+	int selectedBoxIndex;
 	// camera
 	Camera * camera;
 	glm::mat4 projection;
@@ -30,10 +28,10 @@ public:
 	static ShapeManager* getInstance();
 	ShapeManager(ShapeManager& other) = delete;
 	void operator= (const ShapeManager &) = delete;
-	void addThreeDimensionalFigure(ThreeDimensionalFigure * threeDimensionalFigure);
+	void addBox(Box * box);
 	void renderAll();
 	void selectThreeDimensionalFigure(int index);
-	void processTranslation(float dx, float dy, float dz);
+	void processTranslation(float xDirection, float yDirection, float zDirection);
 	void rotateIn3D(glm::mat4 rogridMatrix);
 	void moveCamera(float xoffset, float yoffset);
 	void processKeyBoard(CameraMovement direction, float deltaTime);

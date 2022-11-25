@@ -140,7 +140,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="Box.cpp" />
+    <ClCompile Include="CollisionData.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -150,7 +152,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Cube.h" />
+    <ClInclude Include="Collider.h" />
+    <ClInclude Include="Box.h" />
+    <ClInclude Include="CollisionData.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ScreenProperty.h" />
     <ClInclude Include="Shader.h" />

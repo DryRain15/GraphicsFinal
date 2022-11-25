@@ -1,5 +1,6 @@
 #include "ShapeManager.h"
 #include "ScreenProperty.h"
+#include "CollisionData.h"
 
 ShapeManager::ShapeManager()
 {
@@ -8,10 +9,8 @@ ShapeManager::ShapeManager()
     
     this->camera = new Camera(glm::vec3(-0.3f, 0.2f, 1.0f));
     this->projection = glm::perspective(glm::radians(camera->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-    this->polygonNumber = 0;
-    this->selectedThreeDimensionalFigureIndex = -1;
-    this->selectedPolygonIndex = -1;
-    this->threeDimensionalFigureNumber = 0;
+    this->selectedBoxIndex = 0;
+    this->boxNumber = 0;
 }
 
 ShapeManager* ShapeManager::getInstance() {
@@ -32,10 +31,10 @@ void ShapeManager::Destroy() {
     delete ShapeManager::drawingManager;
 }
 
-void ShapeManager::addThreeDimensionalFigure(ThreeDimensionalFigure* threeDimensionalFigure)
+void ShapeManager::addBox(Box* box)
 {
-    threeDimensionFigures.push_back(threeDimensionalFigure);
-    this->threeDimensionalFigureNumber += 1;
+    boxes.push_back(box);
+    this->boxNumber += 1;
 
 }
 
@@ -61,40 +60,47 @@ void ShapeManager::renderAll()
         glDepthFunc(GL_LESS);
         glDepthRange(0.1, 100);
         
-        for (int i = 0; i < this->threeDimensionalFigureNumber; i++) {
+        for (int i = 0; i < this->boxNumber; i++) {
             glStencilFunc(GL_ALWAYS, i + 1, 1);
 
-            threeDimensionFigures[i]->setShaderValue(this->basic3DShader);
-            threeDimensionFigures[i]->render();
+            boxes[i]->setShaderValue(this->basic3DShader);
+            boxes[i]->render();
         }
- 
+
+        for (int i = 0; i < this->boxNumber; i++) {
+            for (int j = i + 1; j < this->boxNumber; j++) {
+                if (boxes[i]->isCollideWith(boxes[j])) {
+                    cout << "i " << i << "j " <<  j << endl;
+                    CollisionData* collisionData = new CollisionData(boxes[i], boxes[j]);
+                }
+            }
+        }
 }
 
 void ShapeManager::selectThreeDimensionalFigure(int index)
 {
     if (isValidIndex3d(index)) {
-        this->selectedThreeDimensionalFigureIndex = index;
+        this->selectedBoxIndex = index;
     }
 }
 
-void ShapeManager::processTranslation(float dx, float dy, float dz)
+void ShapeManager::processTranslation(float directionX, float directionY, float directionZ)
 {
-   
-    if (this->selectedThreeDimensionalFigureIndex != -1) {
-        threeDimensionFigures[this->selectedThreeDimensionalFigureIndex]->translation(dx, dy, dz);
+    if (this->selectedBoxIndex != -1) {
+        boxes[this->selectedBoxIndex]->translation(directionX, directionY, directionZ);
     }
    
     
 }
 
 bool ShapeManager::isValidIndex3d(int index) {
-    return index >= 0 && index < this->threeDimensionalFigureNumber;
+    return index >= 0 && index < this->boxNumber;
 }
 
 void ShapeManager::rotateIn3D(glm::mat4 rogridMatrix)
 {
-    if (this->selectedThreeDimensionalFigureIndex != -1) {
-        this->threeDimensionFigures[this->selectedThreeDimensionalFigureIndex]->transformation(rogridMatrix);
+    if (this->selectedBoxIndex != -1) {
+        this->boxes[this->selectedBoxIndex]->transformation(rogridMatrix);
     }
 }
 

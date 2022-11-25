@@ -39,7 +39,13 @@
     <ClCompile Include="ThreeDimensionalFigure.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Cube.cpp">
+    <ClCompile Include="Box.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionData.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,7 +59,7 @@
     <ClInclude Include="Camera.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Cube.h">
+    <ClInclude Include="Box.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Shape.h">
@@ -66,6 +72,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ScreenProperty.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionData.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,7 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Shader.h"
-#include "Cube.h"
+#include "Box.h"
 #include "ShapeManager.h"
 #include "ScreenProperty.h"
 
@@ -96,6 +96,7 @@ int main()
     return 0;
 }
 
+// ¹Ú½º collision test 
 void addDefaultObjects() {
     float* vertices = new float[24] {
         -0.1f, 0.1f, -0.1f,  //Point A 0
@@ -107,16 +108,42 @@ void addDefaultObjects() {
         0.1f, -0.1f, -0.1f,//Point G 6
         0.1f, -0.1f, 0.1f//Point H 7
     };
-   shapeManager->addThreeDimensionalFigure(new Cube(vertices));
+   shapeManager->addBox(new Box(vertices));
+   float* secondVertices = new float[24] {
+       -0.35f, 0.1f, -0.1f,  //Point A 0
+        -0.35f, 0.1f, 0.1f,//Point B 1
+        -0.15f, 0.1f, -0.1f,//Point C 2
+        -0.15f, 0.1f, 0.1f, //Point D 3
+        -0.35f, -0.1f, -0.1f, //Point E 4
+        -0.35f, -0.1f, 0.1f,//Point F 5
+        -0.15f, -0.1f, -0.1f,//Point G 6
+        -0.15f, -0.1f, 0.1f//Point H 7
+   };
+   shapeManager->addBox(new Box(secondVertices));
+
+   
+
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow* window)
 {
-    
+    float xDirection = 0, zDirection = 0;
+    float distance = deltaTime;
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        zDirection = distance;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        zDirection = -1 * distance;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        xDirection = -1 * distance;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        xDirection = distance;
+
+    shapeManager->processTranslation(xDirection, 0, zDirection);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
