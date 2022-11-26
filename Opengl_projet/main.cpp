@@ -31,6 +31,7 @@ ShapeManager* shapeManager;
 
 int main()
 {
+    
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();

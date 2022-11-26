@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Shader.h"
 #include "Box.h"
+#include "Sphere.h"
 
 using namespace std;
 
@@ -11,6 +12,7 @@ private:
 	static ShapeManager* drawingManager;
 	ShapeManager();
 	vector<Box*> boxes;
+	vector<Sphere*> spheres;
 	Shader* basic2DShader;
 	Shader* basic3DShader;
 	int boxNumber;
