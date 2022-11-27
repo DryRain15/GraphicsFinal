@@ -88,11 +88,11 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader.vert">
-      <Filter>소스 파일</Filter>
-    </None>
     <None Include="shader.frag">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\shaders</Filter>
+    </None>
+    <None Include="shader.vert">
+      <Filter>소스 파일\shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

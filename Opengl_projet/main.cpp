@@ -52,7 +52,7 @@ int main()
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    // glad: load all OpenGL function pointers
+    // glad:  all OpenGL function pointers
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
@@ -121,9 +121,8 @@ void addDefaultObjects() {
         -0.15f, -0.1f, 0.1f//Point H 7
    };
    shapeManager->addBox(new Box(secondVertices));
-
-   
-
+   shapeManager->addSphere(new Sphere());
+   shapeManager->addSphere(new Sphere(glm::vec3(-0.3, 0.5, 0)));
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly

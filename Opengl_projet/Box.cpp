@@ -38,10 +38,7 @@ Box::Box(float* vertices, vector<unsigned int> vertexAttributeNumbers, unsigned 
 
 bool Box::isCollideWith(Box * box)
 {
-	cout << "this max point" << maxPoint.x << " " << maxPoint.y << " " << maxPoint.z << endl;
-	cout << "this min point" << minPoint.x << " " << minPoint.y << "  " << minPoint.z << endl;
-	cout << "box max point" << box->maxPoint.x << " " << box->maxPoint.y << " " << box->maxPoint.z << endl;
-	cout << "box min point" << box->minPoint.x << " " << box->minPoint.y << "  " << box->minPoint.z << endl;
+	
 	return(this->maxPoint.x > box->minPoint.x &&
 		this->minPoint.x < box->maxPoint.x&&
 		this->maxPoint.y > box->minPoint.y &&
