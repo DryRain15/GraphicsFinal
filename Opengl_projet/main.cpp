@@ -10,6 +10,7 @@
 #include "Box.h"
 #include "ShapeManager.h"
 #include "ScreenProperty.h"
+#include "PhysicsManager.h"
 
 #include "Shader.h"
 
@@ -28,8 +29,9 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 ShapeManager* shapeManager;
+PhysicsManager* physicsManager;
 
-int main()
+int main(int argc, char **argv)
 {
     
     // glfw: initialize and configure
@@ -62,6 +64,11 @@ int main()
 
     // make Drawing manager singleton
     shapeManager = ShapeManager::getInstance();
+    // physicsManager = PhysicsManager::getInstance();
+
+
+    //Initiate Physics
+
 
     // render loop
     // -----------
