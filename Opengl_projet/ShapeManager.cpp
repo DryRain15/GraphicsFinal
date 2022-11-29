@@ -10,7 +10,9 @@ ShapeManager::ShapeManager()
     this->camera = new Camera(glm::vec3(-0.3f, 0.2f, 1.0f));
     this->projection = glm::perspective(glm::radians(camera->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
     this->selectedBoxIndex = 0;
+    this->selectedSphereIndex = 0;
     this->boxNumber = 0;
+    this->sphereNumber = 0;
 }
 
 ShapeManager* ShapeManager::getInstance() {
@@ -38,6 +40,12 @@ void ShapeManager::addBox(Box* box)
 
 }
 
+void ShapeManager::addSphere(Sphere* sphere)
+{
+    spheres.push_back(sphere);
+    this->sphereNumber += 1;
+}
+
 void ShapeManager::renderAll()
 {  
     // 나중에 시간될 때 리팩토링 ㄱ ㄱ
@@ -61,8 +69,7 @@ void ShapeManager::renderAll()
         glDepthRange(0.1, 100);
         
         for (int i = 0; i < this->boxNumber; i++) {
-            glStencilFunc(GL_ALWAYS, i + 1, 1);
-
+            //glStencilFunc(GL_ALWAYS, i + 1, 1);
             boxes[i]->setShaderValue(this->basic3DShader);
             boxes[i]->render();
         }
@@ -70,11 +77,32 @@ void ShapeManager::renderAll()
         for (int i = 0; i < this->boxNumber; i++) {
             for (int j = i + 1; j < this->boxNumber; j++) {
                 if (boxes[i]->isCollideWith(boxes[j])) {
-                    cout << "i " << i << "j " <<  j << endl;
+                    //cout << "i " << i << "j " <<  j << endl;
                     CollisionData* collisionData = new CollisionData(boxes[i], boxes[j]);
                 }
             }
         }
+        
+
+
+        for (int i = 0; i < this->sphereNumber; i++) {
+            spheres[i]->init(0);
+        }
+
+        for (int i = 0; i < this->sphereNumber; i++) {
+            spheres[i]->setShaderValue(this->basic3DShader);
+            spheres[i]->render();
+        }
+
+        for (int i = 0; i < this->sphereNumber; i++) {
+            for (int j = i + 1; j < this->sphereNumber; j++) {
+                if (spheres[i]->isCollideWith(spheres[j])) {
+                    cout << "i " << i << "j " << j << endl;
+                    CollisionData* collisionData = new CollisionData(spheres[i], spheres[j]);
+                }
+            }
+        }
+
 }
 
 void ShapeManager::selectThreeDimensionalFigure(int index)
@@ -87,7 +115,8 @@ void ShapeManager::selectThreeDimensionalFigure(int index)
 void ShapeManager::processTranslation(float directionX, float directionY, float directionZ)
 {
     if (this->selectedBoxIndex != -1) {
-        boxes[this->selectedBoxIndex]->translation(directionX, directionY, directionZ);
+        //boxes[this->selectedBoxIndex]->translation(directionX, directionY, directionZ);
+        spheres[this->selectedSphereIndex]->translation(directionX, directionY, directionZ);
     }
    
     
