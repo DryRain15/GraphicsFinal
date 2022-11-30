@@ -108,7 +108,7 @@ bool Sphere::isCollideWith(Sphere* neighbor)
 
 glm::vec3 Sphere::getCenter()
 {
-    return glm::vec3();
+    return this->center;
 }
 
 float Sphere::getRadius() {
