@@ -56,6 +56,7 @@ void Box::translation(float directionX, float directionY, float directionZ)
 	ThreeDimensionalFigure::translation(dx, dy, dz);
 	this->minPoint = glm::vec3(minPoint.x + dx, minPoint.y + dy, minPoint.z + dz);
 	this->maxPoint = glm::vec3(maxPoint.x + dx, maxPoint.y + dy, maxPoint.z + dz);
+	this->center = (this->maxPoint + this->minPoint) * 0.5f;
 }
 
 glm::vec3 Box::getCenter() {
