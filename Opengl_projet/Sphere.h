@@ -17,6 +17,8 @@ public:
 	void render() override;
 	bool isCollideWith(Sphere* neighbor);
 	void init(GLuint vertexPositionID);
+	glm::vec3 getCenter();
+	float getRadius();
 	virtual void translation(float directionX, float directionY, float directionZ);
 };
 

@@ -24,6 +24,7 @@ Box::Box(float* vertices, vector<unsigned int> vertexAttributeNumbers, unsigned 
 	};
 	this->maxPoint = glm::vec3(vertices[9], vertices[10], vertices[11]);
 	this->minPoint = glm::vec3(vertices[12], vertices[13], vertices[14]);
+	this->center = (this->maxPoint + this->minPoint) * 0.5f;
 	this->verticeAttributes = vertices;
 	this->indices = indices;
 	this->vertexAttributeNumbers.push_back(3);
@@ -55,4 +56,8 @@ void Box::translation(float directionX, float directionY, float directionZ)
 	ThreeDimensionalFigure::translation(dx, dy, dz);
 	this->minPoint = glm::vec3(minPoint.x + dx, minPoint.y + dy, minPoint.z + dz);
 	this->maxPoint = glm::vec3(maxPoint.x + dx, maxPoint.y + dy, maxPoint.z + dz);
+}
+
+glm::vec3 Box::getCenter() {
+	return this->center;
 }
