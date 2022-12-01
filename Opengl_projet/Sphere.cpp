@@ -105,3 +105,12 @@ bool Sphere::isCollideWith(Sphere* neighbor)
     cout << distanceBetweenCenter << "distanceBetwenCenter" << endl;
     return distanceBetweenCenter <= (this->radius + neighbor->radius);
 }
+
+glm::vec3 Sphere::getCenter()
+{
+    return this->center;
+}
+
+float Sphere::getRadius() {
+    return this->radius;
+}
