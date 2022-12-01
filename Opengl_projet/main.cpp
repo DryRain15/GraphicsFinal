@@ -64,7 +64,7 @@ int main(int argc, char **argv)
 
     // make Drawing manager singleton
     shapeManager = ShapeManager::getInstance();
-    // physicsManager = PhysicsManager::getInstance();
+    physicsManager = PhysicsManager::getInstance();
 
 
     //Initiate Physics

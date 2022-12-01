@@ -4,6 +4,7 @@
 #include "Collider.h"
 #include "CollisionData.h"
 #include <stack>
+#include <unordered_map>
 #include <new>
 #include <stdlib.h>
 #include <glm/glm.hpp>
@@ -34,6 +35,7 @@ private:
 
 	// Physics Manager
 	std::stack<CollisionData*> dataStack;
+	std::unordered_map<Collider*, Collider_Type> colliderHash;
 
 	void ProcessCollision() {
 		while (!dataStack.empty()) {
@@ -43,6 +45,11 @@ private:
 			ProcessCollsionInternal(data);
 		}
 	}
+
+	/// <summary>
+	/// 물체 충돌시 연산 구현부
+	/// </summary>
+	/// <param name="data"></param>
 	void ProcessCollsionInternal(CollisionData* data);
 
 	// 물체의 이동 속도는 Vector3 per sec로 구한다.
@@ -69,7 +76,13 @@ public:
 		dataStack.push(data);
 	}
 
+	void ResisterPhysicsCollider(Collider* collider, Collider_Type t) {
+		colliderHash[collider] = t;
+	}
 
+	void UnresisterPhysicsCollider(Collider* collider, Collider_Type t) {
+		colliderHash.erase(collider);
+	}
 };
 
 
