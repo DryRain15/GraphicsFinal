@@ -48,7 +48,7 @@ void ShapeManager::addSphere(Sphere* sphere)
 
 void ShapeManager::renderAll()
 {  
-    // ³ªÁß¿¡ ½Ã°£µÉ ¶§ ¸®ÆÑÅä¸µ ¤¡ ¤¡
+    // ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ä¸µ ï¿½ï¿½ ï¿½ï¿½
    
   
         this->basic3DShader->use();
@@ -78,13 +78,12 @@ void ShapeManager::renderAll()
             for (int j = i + 1; j < this->boxNumber; j++) {
                 if (boxes[i]->isCollideWith(boxes[j])) {
                     //cout << "i " << i << "j " <<  j << endl;
+                    
                     CollisionData* collisionData = new CollisionData(boxes[i], boxes[j]);
                 }
             }
         }
         
-
-
         for (int i = 0; i < this->sphereNumber; i++) {
             spheres[i]->init(0);
         }
@@ -126,10 +125,10 @@ bool ShapeManager::isValidIndex3d(int index) {
     return index >= 0 && index < this->boxNumber;
 }
 
-void ShapeManager::rotateIn3D(glm::mat4 rogridMatrix)
+void ShapeManager::rotateIn3D(float rotationAngle, glm::vec3 rotationAxis)
 {
     if (this->selectedBoxIndex != -1) {
-        this->boxes[this->selectedBoxIndex]->transformation(rogridMatrix);
+        this->boxes[this->selectedBoxIndex]->rotate(rotationAngle, rotationAxis);
     }
 }
 

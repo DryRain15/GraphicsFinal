@@ -97,7 +97,7 @@ int main()
     return 0;
 }
 
-// ¹Ú½º collision test 
+// ï¿½Ú½ï¿½ collision test 
 void addDefaultObjects() {
     float* vertices = new float[24] {
         -0.1f, 0.1f, -0.1f,  //Point A 0
@@ -121,6 +121,7 @@ void addDefaultObjects() {
         -0.15f, -0.1f, 0.1f//Point H 7
    };
    shapeManager->addBox(new Box(secondVertices));
+   shapeManager->rotateIn3D(1, glm::vec3(0, 1, 0));
    shapeManager->addSphere(new Sphere());
    shapeManager->addSphere(new Sphere(glm::vec3(-0.3, 0.5, 0)));
 }

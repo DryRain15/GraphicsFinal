@@ -37,7 +37,7 @@ public:
 	void renderAll();
 	void selectThreeDimensionalFigure(int index);
 	void processTranslation(float xDirection, float yDirection, float zDirection);
-	void rotateIn3D(glm::mat4 rogridMatrix);
+	void rotateIn3D(float rotationAngle, glm::vec3 rotationAxis);
 	void moveCamera(float xoffset, float yoffset);
 	void processKeyBoard(CameraMovement direction, float deltaTime);
 };
