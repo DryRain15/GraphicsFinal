@@ -1,4 +1,8 @@
 #include "ThreeDimensionalFigure.h"
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+
+using namespace glm;
 
 ThreeDimensionalFigure& ThreeDimensionalFigure::operator=(const ThreeDimensionalFigure& threeDimensionalFigure)
 {
@@ -23,17 +27,12 @@ void ThreeDimensionalFigure::scale(float svalue, int index)
 	this->matrix = scaleMatrix * this->matrix;
 }
 
-void ThreeDimensionalFigure::rotate(float angle)
+void ThreeDimensionalFigure::rotate(float rotationAngle, glm::vec3 rotationAxis)
 {
-	glm::mat4 rotationMatrix = glm::mat4(1.0f);
-	float cosValue = cos(angle);
-	float sinValue = sin(angle);
-
-	rotationMatrix[0][0] = cosValue;
-	rotationMatrix[1][0] = -1 * sinValue;
-	rotationMatrix[0][1] = sinValue;
-	rotationMatrix[1][1] = cosValue;
-
+	glm::quat quaternion;
+	float angle = (rotationAngle * 3.14 / 180.0);
+	quaternion = glm::angleAxis(angle, rotationAxis);
+	mat4 rotationMatrix = glm::toMat4(quaternion);
 	this->matrix = rotationMatrix * this->matrix;
 }
 
@@ -54,4 +53,9 @@ void ThreeDimensionalFigure::setPosition(float dx, float dy, float dz) {
 	this->matrix[3][0] = dx;
 	this->matrix[3][1] = dy;
 	this->matrix[3][2] = dz;
+}
+
+glm::mat4 ThreeDimensionalFigure::getRotationMatrix()
+{
+	return this->rotationMatrix;
 }

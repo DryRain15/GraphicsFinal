@@ -5,14 +5,16 @@
 
 class ThreeDimensionalFigure: public Shape
 {
+protected:
+	glm::mat4 rotationMatrix;
 public:
 	ThreeDimensionalFigure& operator=(const ThreeDimensionalFigure& threeDimensionalFigure);
-	// 좋은 아이디어 생각나면 transformation 코드 줄이기
 	virtual void translation(float dx, float dy, float dz);
 	void scale(float svalue, int index);
-	void rotate(float angle);
+	void rotate(float angle, glm::vec3 rotationAxis);
 	void transformation(glm::mat3 newMatrix);
 	void setPosition(float dx, float dy, float dz);
+	glm::mat4 getRotationMatrix();
 };
 
 #endif
