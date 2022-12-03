@@ -144,7 +144,9 @@
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="CollisionData.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="InternalEnergy.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PhysicsManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="ShapeManager.cpp" />
@@ -156,6 +158,8 @@
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="CollisionData.h" />
+    <ClInclude Include="InternalEnergy.h" />
+    <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ScreenProperty.h" />
     <ClInclude Include="Shader.h" />

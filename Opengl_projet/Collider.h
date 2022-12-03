@@ -13,11 +13,12 @@ enum Collider_Type {
 
 class Collider
 {
-protected:
+public:
 	Collider_Type type;
 	glm::vec3 velocity;
+	glm::quat angularVelocity;
 	float weight;
-public:
+
 	Collider(Collider_Type type, float weight, glm::vec3 velocity);
 };
 #endif

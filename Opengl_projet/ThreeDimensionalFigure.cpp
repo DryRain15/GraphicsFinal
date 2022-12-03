@@ -32,6 +32,11 @@ void ThreeDimensionalFigure::rotate(float rotationAngle, glm::vec3 rotationAxis)
 	glm::quat quaternion;
 	float angle = (rotationAngle * 3.14 / 180.0);
 	quaternion = glm::angleAxis(angle, rotationAxis);
+	rotate(quaternion);
+}
+
+void ThreeDimensionalFigure::rotate(glm::quat quaternion)
+{
 	mat4 rotationMatrix = glm::toMat4(quaternion);
 	this->matrix = rotationMatrix * this->matrix;
 }

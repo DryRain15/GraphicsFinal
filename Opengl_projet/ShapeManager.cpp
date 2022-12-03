@@ -75,11 +75,13 @@ void ShapeManager::renderAll()
         }
 
         for (int i = 0; i < this->boxNumber; i++) {
+            if (boxes[i]->type == STATIC) continue;
             for (int j = i + 1; j < this->boxNumber; j++) {
                 if (boxes[i]->isCollideWith(boxes[j])) {
                     //cout << "i " << i << "j " <<  j << endl;
                     
                     CollisionData* collisionData = new CollisionData(boxes[i], boxes[j]);
+					PhysicsManager::getInstance()->RequestCollisionProcessing(collisionData);
                 }
             }
         }
@@ -114,8 +116,8 @@ void ShapeManager::selectThreeDimensionalFigure(int index)
 void ShapeManager::processTranslation(float directionX, float directionY, float directionZ)
 {
     if (this->selectedBoxIndex != -1) {
-        //boxes[this->selectedBoxIndex]->translation(directionX, directionY, directionZ);
-        spheres[this->selectedSphereIndex]->translation(directionX, directionY, directionZ);
+        boxes[this->selectedBoxIndex]->translation(directionX, directionY, directionZ);
+        //spheres[this->selectedSphereIndex]->translation(directionX, directionY, directionZ);
     }
    
     
