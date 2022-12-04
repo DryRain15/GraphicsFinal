@@ -112,8 +112,8 @@ void ShapeManager::selectThreeDimensionalFigure(int index)
 void ShapeManager::processTranslation(float directionX, float directionY, float directionZ)
 {
     if (this->selectedBoxIndex != -1) {
-        //boxes[this->selectedBoxIndex]->translation(directionX, directionY, directionZ);
-        spheres[this->selectedSphereIndex]->translation(directionX, directionY, directionZ);
+        boxes[this->selectedBoxIndex]->translation(directionX, directionY, directionZ);
+        //spheres[this->selectedSphereIndex]->translation(directionX, directionY, directionZ);
     }
    
     

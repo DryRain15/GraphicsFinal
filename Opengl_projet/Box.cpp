@@ -34,6 +34,8 @@ Box::Box(float* vertices, vector<unsigned int> vertexAttributeNumbers, unsigned 
 	this->totalCoordinateNumber = eachAttributeNumber * totalVerticeNumber;
 	this->color = glm::vec3(1.0, 0.5, 0);
 	this->matrix = glm::mat4(1.0f);
+	this->rotationMatrix = glm::mat4(1.0f);
+	this->translationMatrix = glm::mat4(1.0f);
 	this->initiliazeVertexBufferDatas();
 }
 

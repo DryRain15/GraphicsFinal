@@ -107,6 +107,13 @@ void Shape::render()
 void Shape::setShaderValue(Shader* shader)
 {
 	shader->setVec3("color", color);
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			cout << matrix[i][j] << " ";
+		}
+		cout << endl;
+	}
+
 	shader->setMat4("transformation", this->matrix);
 }
 
