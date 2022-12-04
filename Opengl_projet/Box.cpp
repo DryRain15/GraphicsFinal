@@ -40,6 +40,7 @@ Box::Box(float* vertices, vector<unsigned int> vertexAttributeNumbers, unsigned 
 	this->initiliazeVertexBufferDatas();
 }
 
+/*
 bool Box::isCollideWith(Box * box)
 {
 	return(this->maxPoint.x > box->minPoint.x &&
@@ -49,13 +50,70 @@ bool Box::isCollideWith(Box * box)
 		this->maxPoint.z > box->minPoint.z &&
 		this->minPoint.z < box->maxPoint.z);
 }
+*/
+
+// Check if two OBBs are colliding
+bool Box::isCollideWith(Box* box)
+{
+	// Compute rotation matrix expressing box1 in box2's coordinate frame
+	glm::mat3 R = glm::mat3(box->getMatrix()) * glm::transpose(glm::mat3(this->getMatrix()));
+
+	glm::vec3 T = box->center - this->center;
+	// Bring translation into box2's coordinate frame
+	T = glm::vec3(glm::dot(T, glm::vec3(box->getMatrix()[0])), glm::dot(T, glm::vec3(box->getMatrix()[1])), glm::dot(T, glm::vec3(box->getMatrix()[2])));
+
+	// Compute common subexpressions. Add in an epsilon term to
+	// counteract arithmetic errors when two edges are parallel and
+	// their cross product is (near) null (see text for details)
+	glm::vec3 absR[3];
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 3; j++)
+			absR[i][j] = abs(R[i][j]) + FLT_EPSILON;
+
+	glm::vec3 extentThis = (this->maxPoint - this->minPoint) / 2.0f;
+	glm::vec3 extentOther = (box->maxPoint - box->minPoint) / 2.0f;
+
+	// Test axes L = A0, L = A1, L = A2
+	for (int i = 0; i < 3; i++)
+	{
+		float ra = extentOther[i];
+		float rb = glm::dot(extentThis, absR[i]);
+		if (abs(T[i]) > ra + rb) return false;
+	}
+
+	// Test axes L = B0, L = B1, L = B2
+	for (int i = 0; i < 3; i++)
+	{
+		float ra = extentOther[0] * absR[0][i] + extentOther[1] * absR[1][i] + extentOther[2] * absR[2][i];
+		float rb = extentThis[i];
+		if (abs(T[0] * R[0][i] + T[1] * R[1][i] + T[2] * R[2][i]) > ra + rb) return false;
+	}
+
+	// Test axis L = A0
+	float ra = extentOther[1] * absR[2][0] + extentOther[2] * absR[1][0];
+	float rb = extentThis[1] * absR[0][2] + extentThis[2] * absR[0][1];
+	if (abs(T[2] * R[1][0] - T[1] * R[2][0]) > ra + rb) return false;
+	
+	// Test axis L = A1
+	ra = extentOther[0] * absR[2][1] + extentOther[2] * absR[0][1];
+	rb = extentThis[0] * absR[1][2] + extentThis[2] * absR[1][0];
+	if (abs(T[2] * R[0][1] - T[0] * R[2][1]) > ra + rb) return false;
+	
+	// Test axis L = A2
+	ra = extentOther[0] * absR[1][2] + extentOther[1] * absR[0][2];
+	rb = extentThis[0] * absR[2][1] + extentThis[1] * absR[2][0];
+	if (abs(T[1] * R[0][2] - T[0] * R[1][2]) > ra + rb) return false;
+	
+	// Since no separating axis is found, the OBBs must be intersecting
+	return true;
+}
+
 
 void Box::translation(float directionX, float directionY, float directionZ)
 {
 	float dx = directionX * velocity.x;
 	float dy = directionY * velocity.y;
 	float dz = directionZ * velocity.z;
-	ThreeDimensionalFigure::translation(dx, dy, dz);
 	this->minPoint = glm::vec3(minPoint.x + dx, minPoint.y + dy, minPoint.z + dz);
 	this->maxPoint = glm::vec3(maxPoint.x + dx, maxPoint.y + dy, maxPoint.z + dz);
 	this->center = this->center + glm::vec3(dx, dy, dz);
@@ -98,9 +156,9 @@ glm::vec3 Box::getMomentumAtPoint(glm::vec3 point) {
 	return totalMomentum;
 }
 
-void Box::resetMomentum()
+void Box::resetMomentum(float defaultValue = 0.0f)
 {
-	this->velocity = glm::vec3(1);
+	this->velocity = glm::vec3(defaultValue);
 	this->angularVelocity = glm::vec3(0);
 }
 
@@ -113,7 +171,7 @@ void Box::applyExternalMomentumAtPoint(glm::vec3 point, glm::vec3 momentum) {
 	glm::vec3 pointToCenterNormalized = getVelocityNormalized(distance);
 	glm::vec3 momentumToCenter = glm::dot(momentum, pointToCenterNormalized) * pointToCenterNormalized;
 	glm::vec3 momentumToAngular = momentum - momentumToCenter;
-	this->velocity = momentumToCenter;
+	this->velocity = momentumToCenter / this->weight;
 
 	// Convert linear momentum "momentumToAngular" into angular momentum as Quaternion
 	glm::vec3 angularMomentum = glm::cross(distance, momentumToAngular);

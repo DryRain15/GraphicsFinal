@@ -46,8 +46,8 @@ void Sphere::init(GLuint vertexPositionID)
     glGenBuffers(1, &m_vboIndex);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIndex);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
-    cout << glGetError() << endl;
-    cout << numsToDraw << " nums to draw" << endl;
+    //cout << glGetError() << endl;
+    //cout << numsToDraw << " nums to draw" << endl;
     numsToDraw = indices.size();
 }
 
@@ -93,6 +93,8 @@ Sphere::~Sphere()
 
 void Sphere::render()
 {
+    // draw sphere
+    //cout << "draw sphere" << endl;
     glBindVertexArray(m_vao);
   
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIndex);
@@ -102,7 +104,7 @@ void Sphere::render()
 bool Sphere::isCollideWith(Sphere* neighbor)
 {
     float distanceBetweenCenter = glm::length(neighbor->center - this->center);
-    cout << distanceBetweenCenter << "distanceBetwenCenter" << endl;
+    //cout << distanceBetweenCenter << "distanceBetwenCenter" << endl;
     return distanceBetweenCenter <= (this->radius + neighbor->radius);
 }
 

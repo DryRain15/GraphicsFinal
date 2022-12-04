@@ -3,6 +3,9 @@
 #include "Shader.h"
 #include "Box.h"
 #include "Sphere.h"
+#include "ScreenProperty.h"
+#include "CollisionData.h"
+#include "PhysicsManager.h"
 
 using namespace std;
 

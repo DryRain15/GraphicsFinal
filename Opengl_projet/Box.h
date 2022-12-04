@@ -83,7 +83,7 @@ public:
 	glm::vec3 getMomentumAtPoint(glm::vec3 point);
 	glm::vec3 getClosestPoint(glm::vec3 point);
 	glm::vec3 getIntersectionPoint(glm::vec3 line);
-	void resetMomentum();
+	void resetMomentum(float defaultValue);
 	void applyExternalMomentumAtPoint(glm::vec3 point, glm::vec3 externalMomentum);
 	virtual void translation(float directionX, float directionY, float directionZ);
 };

@@ -170,7 +170,7 @@ void addDefaultObjects() {
         3.0f, -0.3f, -1.0f,//Point G 6
         3.0f, -0.3f, 1.0f//Point H 7
    };
-   shapeManager->addBox(new Box(secondVertices));
+   shapeManager->addBox(new Box(floor, { 3 }, 3, STATIC));
    shapeManager->rotateIn3D(1, glm::vec3(0, 1, 0));
    //shapeManager->addSphere(new Sphere());
    //shapeManager->addSphere(new Sphere(glm::vec3(-0.3, 0.5, 0)));
@@ -181,7 +181,7 @@ void addDefaultObjects() {
 void processInput(GLFWwindow* window)
 {
     float xDirection = 0, zDirection = 0;
-    float distance = deltaTime * 4.0f;
+    float distance = deltaTime * 2.0f;
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 

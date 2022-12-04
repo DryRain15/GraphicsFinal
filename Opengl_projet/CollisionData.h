@@ -1,14 +1,21 @@
 #ifndef COLLISION_DATA_H
 #define COLLISION_DATA_H
-#include "Collider.h"
+#include "Box.h"
+
+class Box;
 
 class CollisionData
 {
 private:
-	Collider* a;
-	Collider* b;
+	Box* a;
+	Box* b;
+	glm::vec3 point;
 public:
-	CollisionData(Collider* a, Collider* b);
+	CollisionData(Box* a, Box* b, glm::vec3 point);
+	CollisionData(Box* a, Box* b);
+	Box* GetColliderA();
+	Box* GetColliderB();
+	glm::vec3 GetPoint();
 };
 
 #endif

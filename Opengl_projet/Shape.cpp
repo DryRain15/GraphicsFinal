@@ -99,7 +99,7 @@ Shape& Shape::operator=(const Shape& shape)
 
 void Shape::render()
 {
-	cout << "shape rendered" << endl;
+	//cout << "shape rendered" << endl;
 	glBindVertexArray(this->vao);
 	glDrawElements(GL_TRIANGLES, this->totalIndiceNumber, GL_UNSIGNED_INT, 0);
 }
@@ -107,13 +107,6 @@ void Shape::render()
 void Shape::setShaderValue(Shader* shader)
 {
 	shader->setVec3("color", color);
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			cout << matrix[i][j] << " ";
-		}
-		cout << endl;
-	}
-
 	shader->setMat4("transformation", this->matrix);
 }
 

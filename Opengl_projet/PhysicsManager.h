@@ -59,9 +59,14 @@ private:
 					it->first->rotate(r);
 					break;
 				}
+				case STATIC:
+				{
+					it->first->resetMomentum(0);
+					break;
+				}
 				default:
 				{
-					it->first->resetMomentum();
+					it->first->resetMomentum(1);
 					break;
 				}
 				}

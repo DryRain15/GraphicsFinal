@@ -1,13 +1,11 @@
 #include "ShapeManager.h"
-#include "ScreenProperty.h"
-#include "CollisionData.h"
 
 ShapeManager::ShapeManager()
 {
     this->basic2DShader = new Shader("2d_shape.vert", "2d_shape.frag");
     this->basic3DShader = new Shader("3d_shape.vert", "3d_shape.frag");
     
-    this->camera = new Camera(glm::vec3(-0.3f, 0.2f, 1.0f));
+    this->camera = new Camera(glm::vec3(-0.3f, 0.4f, 2.0f));
     this->projection = glm::perspective(glm::radians(camera->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
     this->selectedBoxIndex = 0;
     this->selectedSphereIndex = 0;
@@ -38,6 +36,8 @@ void ShapeManager::addBox(Box* box)
     boxes.push_back(box);
     this->boxNumber += 1;
 
+
+    PhysicsManager::getInstance()->ResisterPhysicsCollider(box, box->type);
 }
 
 void ShapeManager::addSphere(Sphere* sphere)
@@ -55,7 +55,15 @@ void ShapeManager::renderAll()
         this->basic3DShader->setMat4("view", camera->GetViewMatrix());
         this->basic3DShader->setFloat("znear", 0.1);
         this->basic3DShader->setFloat("zfar", 100);
+        this->basic3DShader->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+        this->basic3DShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        this->basic3DShader->setVec3("lightPos", glm::vec3(0, 3, 4));
+        this->basic3DShader->setVec3("viewPos", this->camera->Position);
 
+        // world transformation
+        glm::mat4 model = glm::mat4(1.0f);
+        this->basic3DShader->setMat4("model", model);
+		
         glClearStencil(0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -66,7 +74,7 @@ void ShapeManager::renderAll()
         glEnable(GL_STENCIL_TEST);
         glDepthFunc(GL_LESS);
         glDepthRange(0.1, 100);
-        
+		
         for (int i = 0; i < this->boxNumber; i++) {
             //glStencilFunc(GL_ALWAYS, i + 1, 1);
             boxes[i]->setShaderValue(this->basic3DShader);
@@ -77,7 +85,7 @@ void ShapeManager::renderAll()
             if (boxes[i]->type == STATIC) continue;
             for (int j = i + 1; j < this->boxNumber; j++) {
                 if (boxes[i]->isCollideWith(boxes[j])) {
-                   
+                    cout << "i : " << i << " / j : " <<  j << endl;
                     CollisionData* collisionData = new CollisionData(boxes[i], boxes[j]);
 					PhysicsManager::getInstance()->RequestCollisionProcessing(collisionData);
                 }
@@ -92,7 +100,7 @@ void ShapeManager::renderAll()
             spheres[i]->setShaderValue(this->basic3DShader);
             spheres[i]->render();
         }
-
+        /*
         for (int i = 0; i < this->sphereNumber; i++) {
             for (int j = i + 1; j < this->sphereNumber; j++) {
                 if (spheres[i]->isCollideWith(spheres[j])) {
@@ -101,7 +109,7 @@ void ShapeManager::renderAll()
                 }
             }
         }
-
+        */
 }
 
 void ShapeManager::selectThreeDimensionalFigure(int index)
@@ -116,9 +124,8 @@ void ShapeManager::processTranslation(float directionX, float directionY, float 
     if (this->selectedBoxIndex != -1) {
         boxes[this->selectedBoxIndex]->translation(directionX, directionY, directionZ);
         //spheres[this->selectedSphereIndex]->translation(directionX, directionY, directionZ);
-    }
-   
-    
+		//moveCamera(directionX, -directionZ);
+	}    
 }
 
 bool ShapeManager::isValidIndex3d(int index) {

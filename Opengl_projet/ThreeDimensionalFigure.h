@@ -2,6 +2,8 @@
 #define THREE_DIMENSIONAL_FIGURE_H
 
 #include "Shape.h"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/quaternion.hpp"
 
 class ThreeDimensionalFigure: public Shape
 {
