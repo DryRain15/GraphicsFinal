@@ -67,6 +67,8 @@ Sphere::Sphere(glm::vec3 center, float radius, Collider_Type type, float weight,
 	this->center = center;
 	this->color = glm::vec3(1, 0, 0);
 	this->matrix = glm::mat4(1.0f);
+    this->rotationMatrix = glm::mat4(1.0f);
+    this->translationMatrix = glm::mat4(1.0f);
 	ThreeDimensionalFigure::translation(center.x, center.y, center.z);
 	this->latitudes = 40;
 	this->longitudes = 40;
@@ -91,8 +93,6 @@ Sphere::~Sphere()
 
 void Sphere::render()
 {
-    // draw sphere
-    cout << "draw sphere" << endl;
     glBindVertexArray(m_vao);
   
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIndex);

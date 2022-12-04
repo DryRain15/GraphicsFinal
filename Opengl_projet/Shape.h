@@ -7,7 +7,7 @@
 
 using namespace std;
 
-// ¸¸µé ¼ö ÀÖ´Ù¸é Ãß»óÅ¬·¡½º·Î ¸¸µé°í ½Í´Ù. 
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½ß»ï¿½Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Í´ï¿½. 
 class Shape
 {
 protected:
@@ -22,6 +22,8 @@ protected:
 	vector<unsigned int> vertexAttributeNumbers;
 	unsigned int* indices;
 	glm::vec3 color;
+	glm::mat4 rotationMatrix;
+	glm::mat4 translationMatrix;
 	glm::mat4 matrix;
 	void initiliazeVertexBufferDatas();
 public:

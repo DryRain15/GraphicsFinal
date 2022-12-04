@@ -16,8 +16,31 @@ void ThreeDimensionalFigure::translation(float dx, float dy, float dz)
 	transMatrix[3][0] = dx;
 	transMatrix[3][1] = dy;
 	transMatrix[3][2] = dz;
+	cout << "trannslationn " << endl;
+	cout << dx << " " << dy << " " << dz << endl;
+	this->translationMatrix[3][0] += dx;
+	this->translationMatrix[3][1] += dy;
+	this->translationMatrix[3][2] += dz;
 
-	this->matrix = transMatrix * this->matrix;
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			cout << rotationMatrix[i][j] << " ";
+		}
+		cout << endl;
+	}
+
+
+
+	this->matrix = this->translationMatrix * this->rotationMatrix;
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			cout << matrix[i][j] << " ";
+		}
+		cout << endl;
+	}
+
+
 }
 
 void ThreeDimensionalFigure::scale(float svalue, int index)
@@ -25,6 +48,8 @@ void ThreeDimensionalFigure::scale(float svalue, int index)
 	glm::mat4 scaleMatrix = glm::mat4(1.0f);
 	scaleMatrix[index][index] = 1 + svalue;
 	this->matrix = scaleMatrix * this->matrix;
+
+
 }
 
 void ThreeDimensionalFigure::rotate(float rotationAngle, glm::vec3 rotationAxis)
@@ -32,13 +57,9 @@ void ThreeDimensionalFigure::rotate(float rotationAngle, glm::vec3 rotationAxis)
 	glm::quat quaternion;
 	float angle = (rotationAngle * 3.14 / 180.0);
 	quaternion = glm::angleAxis(angle, rotationAxis);
-	rotate(quaternion);
-}
-
-void ThreeDimensionalFigure::rotate(glm::quat quaternion)
-{
-	mat4 rotationMatrix = glm::toMat4(quaternion);
-	this->matrix = rotationMatrix * this->matrix;
+	mat4 rotateMatrix = glm::toMat4(quaternion);
+	this->rotationMatrix = rotateMatrix * this->rotationMatrix;
+	this->matrix = this->translationMatrix * this->rotationMatrix;
 }
 
 void ThreeDimensionalFigure::transformation(glm::mat3 newMatrix)

@@ -56,6 +56,8 @@ Shape::Shape(float* vertices, vector<unsigned int> & vertexAttributeNumbers, uns
 	this->indices = indices;
 	this->color = glm::vec3(0, 0, 1);
 	this->matrix = glm::mat4(1.0f);
+	this->rotationMatrix = glm::mat4(1.0f);
+	this->translationMatrix = glm::mat4(1.0f);
 	this->initiliazeVertexBufferDatas();
 
 }
@@ -105,6 +107,13 @@ void Shape::render()
 void Shape::setShaderValue(Shader* shader)
 {
 	shader->setVec3("color", color);
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			cout << matrix[i][j] << " ";
+		}
+		cout << endl;
+	}
+
 	shader->setMat4("transformation", this->matrix);
 }
 
