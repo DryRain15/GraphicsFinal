@@ -17,11 +17,14 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void addDefaultObjects();
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 float lastDepth;
 bool firstMouse = true;
+bool isMouseClicked = false;
 
 // timing
 float speed = 0.3f;
@@ -53,6 +56,8 @@ int main(int argc, char **argv)
 
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
 
     // glad:  all OpenGL function pointers
     // ---------------------------------------
@@ -108,142 +113,33 @@ int main(int argc, char **argv)
     return 0;
 }
 
-// �ڽ� collision test 
+// collision test 
 void addDefaultObjects() {
     float vertices[] = {
-         -0.1f, -0.1f, -0.1f, 0.0f, 0.0f, -1.0f,
-         0.1f, -0.1f, -0.1f, 0.0f, 0.0f, -1.0f,
-         0.1f, 0.1f, -0.1f, 0.0f, 0.0f, -1.0f,
-         0.1f, 0.1f, -0.1f, 0.0f, 0.0f, -1.0f,
-         -0.1f, 0.1f, -0.1f, 0.0f, 0.0f, -1.0f,
-         -0.1f, -0.1f, -0.1f, 0.0f, 0.0f, -1.0f,
+         -0.1,0.1,-0.1,  //Point A 0
+        -0.1,0.1,0.1,  //Point B 1
+        0.1,0.1,-0.1, //Point C 2
+        0.1,0.1,0.1, //Point D 3
 
-         -0.1f, -0.1f, 0.1f, 0.0f, 0.0f, 1.0f,
-         0.1f, -0.1f, 0.1f, 0.0f, 0.0f, 1.0f,
-         0.1f, 0.1f, 0.1f, 0.0f, 0.0f, 1.0f,
-         0.1f, 0.1f, 0.1f, 0.0f, 0.0f, 1.0f,
-         -0.1f, 0.1f, 0.1f, 0.0f, 0.0f, 1.0f,
-         -0.1f, -0.1f, 0.1f, 0.0f, 0.0f, 1.0f,
-
-         -0.1f, 0.1f, 0.1f, -1.0f, 0.0f, 0.0f,
-         -0.1f, 0.1f, -0.1f, -1.0f, 0.0f, 0.0f,
-         -0.1f, -0.1f, -0.1f, -1.0f, 0.0f, 0.0f,
-         -0.1f, -0.1f, -0.1f, -1.0f, 0.0f, 0.0f,
-         -0.1f, -0.1f, 0.1f, -1.0f, 0.0f, 0.0f,
-         -0.1f, 0.1f, 0.1f, -1.0f, 0.0f, 0.0f,
-
-         0.1f, 0.1f, 0.1f, 1.0f, 0.0f, 0.0f,
-         0.1f, 0.1f, -0.1f, 1.0f, 0.0f, 0.0f,
-         0.1f, -0.1f, -0.1f, 1.0f, 0.0f, 0.0f,
-         0.1f, -0.1f, -0.1f, 1.0f, 0.0f, 0.0f,
-         0.1f, -0.1f, 0.1f, 1.0f, 0.0f, 0.0f,
-         0.1f, 0.1f, 0.1f, 1.0f, 0.0f, 0.0f,
-
-         -0.1f, -0.1f, -0.1f, 0.0f, -1.0f, 0.0f,
-         0.1f, -0.1f, -0.1f, 0.0f, -1.0f, 0.0f,
-         0.1f, -0.1f, 0.1f, 0.0f, -1.0f, 0.0f,
-         0.1f, -0.1f, 0.1f, 0.0f, -1.0f, 0.0f,
-         -0.1f, -0.1f, 0.1f, 0.0f, -1.0f, 0.0f,
-         -0.1f, -0.1f, -0.1f, 0.0f, -1.0f, 0.0f,
-
-         -0.1f, 0.1f, -0.1f, 0.0f, 1.0f, 0.0f,
-         0.1f, 0.1f, -0.1f, 0.0f, 1.0f, 0.0f,
-         0.1f, 0.1f, 0.1f, 0.0f, 1.0f, 0.0f,
-         0.1f, 0.1f, 0.1f, 0.0f, 1.0f, 0.0f,
-         -0.1f, 0.1f, 0.1f, 0.0f, 1.0f, 0.0f,
-         -0.1f, 0.1f, -0.1f, 0.0f, 1.0f, 0.0f
+        -0.1,-0.1,-0.1, //Point E 4
+        -0.1,-0.1,0.1,  //Point F 5
+        0.1,-0.1,-0.1,  //Point G 6
+        0.1,-0.1,0.1,   //Point H 7
     };
-    shapeManager->addBox(new Box(vertices, KINEMETIC));
-	
-   float secondVertices[] = {
-       -0.3f, 0.2f, -0.1f, 0.0f, 0.0f, -1.0f,
-       -0.1f, 0.2f, -0.1f, 0.0f, 0.0f, -1.0f,
-       -0.1f, 0.4f, -0.1f, 0.0f, 0.0f, -1.0f,
-       -0.1f, 0.4f, -0.1f, 0.0f, 0.0f, -1.0f,
-       -0.3f, 0.4f, -0.1f, 0.0f, 0.0f, -1.0f,
-       -0.3f, 0.2f, -0.1f, 0.0f, 0.0f, -1.0f,
-
-       -0.3f, 0.2f, 0.1f, 0.0f, 0.0f, 1.0f,
-       -0.1f, 0.2f, 0.1f, 0.0f, 0.0f, 1.0f,
-       -0.1f, 0.4f, 0.1f, 0.0f, 0.0f, 1.0f,
-       -0.1f, 0.4f, 0.1f, 0.0f, 0.0f, 1.0f,
-       -0.3f, 0.4f, 0.1f, 0.0f, 0.0f, 1.0f,
-       -0.3f, 0.2f, 0.1f, 0.0f, 0.0f, 1.0f,
-
-       -0.3f, 0.4f, 0.1f, -1.0f, 0.0f, 0.0f,
-       -0.3f, 0.4f, -0.1f, -1.0f, 0.0f, 0.0f,
-       -0.3f, 0.2f, -0.1f, -1.0f, 0.0f, 0.0f,
-       -0.3f, 0.2f, -0.1f, -1.0f, 0.0f, 0.0f,
-       -0.3f, 0.2f, 0.1f, -1.0f, 0.0f, 0.0f,
-       -0.3f, 0.4f, 0.1f, -1.0f, 0.0f, 0.0f,
-
-       -0.1f, 0.4f, 0.1f, 1.0f, 0.0f, 0.0f,
-       -0.1f, 0.4f, -0.1f, 1.0f, 0.0f, 0.0f,
-       -0.1f, 0.2f, -0.1f, 1.0f, 0.0f, 0.0f,
-       -0.1f, 0.2f, -0.1f, 1.0f, 0.0f, 0.0f,
-       -0.1f, 0.2f, 0.1f, 1.0f, 0.0f, 0.0f,
-       -0.1f, 0.4f, 0.1f, 1.0f, 0.0f, 0.0f,
-
-       -0.3f, 0.2f, -0.1f, 0.0f, -1.0f, 0.0f,
-       -0.1f, 0.2f, -0.1f, 0.0f, -1.0f, 0.0f,
-       -0.1f, 0.2f, 0.1f, 0.0f, -1.0f, 0.0f,
-       -0.1f, 0.2f, 0.1f, 0.0f, -1.0f, 0.0f,
-       -0.3f, 0.2f, 0.1f, 0.0f, -1.0f, 0.0f,
-       -0.3f, 0.2f, -0.1f, 0.0f, -1.0f, 0.0f,
-
-       -0.3f, 0.4f, -0.1f, 0.0f, 1.0f, 0.0f,
-       -0.1f, 0.4f, -0.1f, 0.0f, 1.0f, 0.0f,
-       -0.1f, 0.4f, 0.1f, 0.0f, 1.0f, 0.0f,
-       -0.1f, 0.4f, 0.1f, 0.0f, 1.0f, 0.0f,
-       -0.3f, 0.4f, 0.1f, 0.0f, 1.0f, 0.0f,
-       -0.3f, 0.4f, -0.1f, 0.0f, 1.0f, 0.0f
-   };
-   shapeManager->addBox(new Box(secondVertices, DYNAMIC));
+   shapeManager->addBox(new Box(vertices, DYNAMIC, 0.8, glm::vec3(0.5)));
    
-   float floor[] = {
-       -3.0f, -0.4f, -1.1f, 0.0f, 0.0f, -1.0f,
-       3.0f, -0.4f, -1.1f, 0.0f, 0.0f, -1.0f,
-       3.0f, -0.2f, -1.1f, 0.0f, 0.0f, -1.0f,
-       3.0f, -0.2f, -1.1f, 0.0f, 0.0f, -1.0f,
-       -3.0f, -0.2f, -1.1f, 0.0f, 0.0f, -1.0f,
-       -3.0f, -0.4f, -1.1f, 0.0f, 0.0f, -1.0f,
+   float secondVertices[] = {
+       -0.4,0.1,-0.1,  //Point A 0
+        -0.4,0.1,0.1,  //Point B 1
+        -0.2,0.1,-0.1, //Point C 2
+        -0.2,0.1,0.1, //Point D 3
 
-       -3.0f, -0.4f, 1.1f, 0.0f, 0.0f, 1.0f,
-       3.0f, -0.4f, 1.1f, 0.0f, 0.0f, 1.0f,
-       3.0f, -0.2f, 1.1f, 0.0f, 0.0f, 1.0f,
-       3.0f, -0.2f, 1.1f, 0.0f, 0.0f, 1.0f,
-       -3.0f, -0.2f, 1.1f, 0.0f, 0.0f, 1.0f,
-       -3.0f, -0.4f, 1.1f, 0.0f, 0.0f, 1.0f,
-
-       -3.0f, -0.2f, 1.1f, -1.0f, 0.0f, 0.0f,
-       -3.0f, -0.2f, -1.1f, -1.0f, 0.0f, 0.0f,
-       -3.0f, -0.4f, -1.1f, -1.0f, 0.0f, 0.0f,
-       -3.0f, -0.4f, -1.1f, -1.0f, 0.0f, 0.0f,
-       -3.0f, -0.4f, 1.1f, -1.0f, 0.0f, 0.0f,
-       -3.0f, -0.2f, 1.1f, -1.0f, 0.0f, 0.0f,
-
-       3.0f, -0.2f, 1.1f, 1.0f, 0.0f, 0.0f,
-       3.0f, -0.2f, -1.1f, 1.0f, 0.0f, 0.0f,
-       3.0f, -0.4f, -1.1f, 1.0f, 0.0f, 0.0f,
-       3.0f, -0.4f, -1.1f, 1.0f, 0.0f, 0.0f,
-       3.0f, -0.4f, 1.1f, 1.0f, 0.0f, 0.0f,
-       3.0f, -0.2f, 1.1f, 1.0f, 0.0f, 0.0f,
-
-       -3.0f, -0.4f, -1.1f, 0.0f, -1.0f, 0.0f,
-       3.0f, -0.4f, -1.1f, 0.0f, -1.0f, 0.0f,
-       3.0f, -0.4f, 1.1f, 0.0f, -1.0f, 0.0f,
-       3.0f, -0.4f, 1.1f, 0.0f, -1.0f, 0.0f,
-       -3.0f, -0.4f, 1.1f, 0.0f, -1.0f, 0.0f,
-       -3.0f, -0.4f, -1.1f, 0.0f, -1.0f, 0.0f,
-
-       -3.0f,-0.2f, -1.1f, 0.0f, 1.0f, 0.0f,
-       3.0f, -0.2f, -1.1f, 0.0f, 1.0f, 0.0f,
-       3.0f, -0.2f, 1.1f, 0.0f, 1.0f, 0.0f,
-       3.0f, -0.2f, 1.1f, 0.0f, 1.0f, 0.0f,
-       -3.0f, -0.2f, 1.1f, 0.0f, 1.0f, 0.0f,
-       -3.0f, -0.2f, -1.1f, 0.0f, 1.0f, 0.0f
+        -0.4,-0.1,-0.1, //Point E 4
+        -0.4,-0.1,0.1,  //Point F 5
+        -0.2,-0.1,-0.1,  //Point G 6
+        -0.2,-0.1,0.1,   //Point H 7
    };
-   shapeManager->addBox(new Box(floor, STATIC));
+   shapeManager->addBox(new Box(secondVertices));
    shapeManager->rotateIn3D(1, glm::vec3(0, 1, 0));
 
    shapeManager->addSphere(new Sphere());
@@ -282,3 +178,39 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        isMouseClicked = true;
+        firstMouse = true;
+    }
+
+    if (button == GLFW_MOUSE_BUTTON_LEFT and action == GLFW_RELEASE) {
+        isMouseClicked = false;
+    }
+}
+
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
+{
+    GLbyte color[3];
+    GLfloat colorf[3];
+    GLuint index;
+    GLfloat depth;
+
+    if (isMouseClicked) {
+        float xpos = static_cast<float>(xposIn);
+        float ypos = static_cast<float>(yposIn);
+
+        float xoffset = xpos - lastX;
+        float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+        float normalizedX = xoffset * 2 / SCR_WIDTH;
+        float normalizedY = yoffset * 2 / SCR_HEIGHT;
+
+        shapeManager->moveCamera(xoffset, yoffset);
+        lastX = xpos;
+        lastY = ypos;
+    }
+        
+    }
