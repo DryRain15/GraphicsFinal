@@ -14,14 +14,14 @@ void PhysicsManager::ProcessCollsionInternal(CollisionData* data, float dt) {
 	// Overlap Point에 대해서 Position fit을 해주어야 한다.
 	// 충돌 주체가 STATIC인 경우는 없을 예정.
 	glm::vec3 dist = A->getCenter() - point;
-	glm::vec3 overlap = (dist + (A->getIntersectionPoint(dist) - A->getCenter())) * 2.0f * dt;
+	glm::vec3 overlap = (dist + (A->getIntersectionPoint(dist) - A->getCenter()))* 2.0f * dt;
 
 	switch (A->type)
 	{
 	case DYNAMIC:
 		{
 		inertiaA = A->getMomentumAtPoint(point);
-		A->translation(overlap.x, overlap.y, overlap.z);
+		A->translation(-overlap.x, -overlap.y, -overlap.z);
 		break;
 		}
 	case KINEMETIC:
@@ -35,17 +35,17 @@ void PhysicsManager::ProcessCollsionInternal(CollisionData* data, float dt) {
 		break;
 		}
 	}
-
+	
 	// 충돌받는 대상
 	switch (B->type)
 	{
 	case STATIC: 
 	{
 		// 충돌 주체에게 모든 운동량 책임을 반전시켜 전가한다.
-		glm::vec3 totalInertia = inertiaA;
-		glm::vec3 halfInertia = totalInertia;
-		
-		A->applyExternalMomentumAtPoint(point, -totalInertia);
+		glm::vec3 totalInertia = inertiaA * (1 - dt);
+		glm::vec3 halfInertia = totalInertia * 0.5f;
+			
+		A->applyExternalMomentumAtPoint(point, -halfInertia);
 
 		break;
 	}
@@ -53,10 +53,17 @@ void PhysicsManager::ProcessCollsionInternal(CollisionData* data, float dt) {
 	{
 		// 충돌 주체와 충돌받는 대상의 운동량을 반으로 나눠준다.
 		glm::vec3 totalInertia = inertiaA + inertiaB;
-		glm::vec3 halfInertia = totalInertia / 2.0f;
+		glm::vec3 halfInertia = totalInertia / 2.0f * (1 - dt);
 
-		A->applyExternalMomentumAtPoint(point, -halfInertia);
-		B->applyExternalMomentumAtPoint(point, halfInertia);
+		if (A->type == KINEMETIC)
+		{
+			B->applyExternalMomentumAtPoint(point, totalInertia);
+		}
+		else 
+		{
+			A->applyExternalMomentumAtPoint(point, -halfInertia);
+			B->applyExternalMomentumAtPoint(point, halfInertia);
+		}
 		
 		break;
 	}

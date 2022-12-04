@@ -42,6 +42,7 @@ void ThreeDimensionalFigure::rotate(glm::quat quaternion)
 {
 	mat4 rotateMatrix = glm::toMat4(quaternion);
 	this->rotationMatrix = rotateMatrix * this->rotationMatrix;
+	
 	this->matrix = this->translationMatrix * this->rotationMatrix;
 }
 

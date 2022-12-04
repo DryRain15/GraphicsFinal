@@ -6,6 +6,8 @@
 class Box : public ThreeDimensionalFigure, public Collider
 {
 private:
+	int index;
+
 	glm::vec3 maxPoint;
 	glm::vec3 minPoint;
 	glm::vec3 center;
@@ -76,17 +78,23 @@ private:
 
 public:
 	Box(float* vertices, Collider_Type type  = DYNAMIC, float weight = 1, glm::vec3 velocity = glm::vec3(0));
-    bool isCollideWith(Box * box);
+    bool isCollideWith(Box* box, bool external = false);
 	glm::vec3 getCenter();
+	glm::vec3 getExtent();
 	glm::vec3 getDirectionalMomentumAtPoint(glm::vec3 point);
 	glm::vec3 getAngularMomentumAtPoint(glm::vec3 point);
 	glm::vec3 getMomentumAtPoint(glm::vec3 point);
 	glm::vec3 getClosestPoint(glm::vec3 point);
-	glm::vec3 getIntersectionPoint(glm::vec3 line);
+	glm::vec3 getIntersectionPoint(glm::vec3 direction);
+	float getIntersectionDistance(glm::vec3 direction);
 	void resetMomentum(float defaultValue);
 	void applyExternalMomentumAtPoint(glm::vec3 point, glm::vec3 externalMomentum);
+	void addExternalMomentumAtPoint(glm::vec3 point, glm::vec3 externalMomentum);
 	virtual void translation(float directionX, float directionY, float directionZ);
 	void render();
+
+	void setIndex(int idx);
+	int getIndex();
 };
 #endif
 

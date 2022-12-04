@@ -10,8 +10,8 @@ varying float depth;
 
 //uniform vec3 viewPos;
 uniform vec3 lightPosition;
-uniform vec3 ambient;
-uniform vec3 diffuse;
+uniform float ambient;
+uniform float diffuse;
 uniform vec3 lightColor;
 
 void main() {

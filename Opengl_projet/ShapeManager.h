@@ -41,6 +41,7 @@ public:
 	void addBox(Box * box);
 	void addSphere(Sphere* sphere);
 	void renderAll();
+	Box* getSelectedBox();
 	void selectThreeDimensionalFigure(int index);
 	void processTranslation(float xDirection, float yDirection, float zDirection);
 	void rotateIn3D(float rotationAngle, glm::vec3 rotationAxis);

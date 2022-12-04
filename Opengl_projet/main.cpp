@@ -15,6 +15,7 @@
 #include "Shader.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+float* getVertices(glm::vec3 pos, glm::vec3 extent);
 void processInput(GLFWwindow* window);
 void addDefaultObjects();
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -80,6 +81,8 @@ int main(int argc, char **argv)
 
     addDefaultObjects();
 
+	
+
     while (!glfwWindowShouldClose(window))
     {
         // per frame time logic
@@ -87,6 +90,9 @@ int main(int argc, char **argv)
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 		
+        if (lastFrame < 1.0f)
+            continue;
+
 		//cout << "fps: " << 1.0f / deltaTime << endl;
 
         // input
@@ -94,7 +100,7 @@ int main(int argc, char **argv)
         processInput(window);
  
         // render
-        //glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         shapeManager->renderAll();
@@ -125,58 +131,62 @@ void addDefaultObjects() {
             -0.15f, 0.0f, -0.1f,//Point G 6
             -0.15f, 0.0f, 0.1f//Point H 7
     };
-    shapeManager->addBox(new Box(vertices, KINEMETIC));
+    shapeManager->addBox(new Box(vertices, KINEMETIC, 2.0f));
 
-    float* secondVertices = new float[24] {
-        -0.1f, 1.6f, -0.1f,  //Point A 0
-            -0.1f, 1.6f, 0.1f,//Point B 1
-            0.1f, 1.6f, -0.1f,//Point C 2
-            0.1f, 1.6f, 0.1f, //Point D 3
-            -0.1f, 1.4f, -0.1f, //Point E 4
-            -0.1f, 1.4f, 0.1f,//Point F 5
-            0.1f, 1.4f, -0.1f,//Point G 6
-            0.1f, 1.4f, 0.1f//Point H 7
-   };
-   shapeManager->addBox(new Box(secondVertices, DYNAMIC));
-
-   float* thVertices = new float[24] {
-       -0.1f, 1.0f, -0.1f,  //Point A 0
-           -0.1f, 1.0f, 0.1f,//Point B 1
-           0.1f, 1.0f, -0.1f,//Point C 2
-           0.1f, 1.0f, 0.1f, //Point D 3
-           -0.1f, 0.8f, -0.1f, //Point E 4
-           -0.1f, 0.8f, 0.1f,//Point F 5
-           0.1f, 0.8f, -0.1f,//Point G 6
-           0.1f, 0.8f, 0.1f//Point H 7
-   };
-   shapeManager->addBox(new Box(thVertices, DYNAMIC));
+    for (float i = -1.5f; i < 1.8f; i += 1.2f) {
+        for (float j = 1.0f; j < 4.1f; j += 1.2f) {
+            shapeManager->addBox(new Box(getVertices(glm::vec3(i, 0.3f, j), glm::vec3(0.1f, 0.1f, 0.1f)), DYNAMIC));
+        }
+    }
 
    float* floor = new float[24] {
-       -3.0f, -0.2f, -1.0f,  //Point A 0
-           -3.0f, -0.2f, 1.0f,//Point B 1
-           3.0f, -0.2f, -1.0f,//Point C 2
-           3.0f, -0.2f, 1.0f, //Point D 3
-           -3.0f, -0.3f, -1.0f, //Point E 4
-           -3.0f, -0.3f, 1.0f,//Point F 5
-           3.0f, -0.3f, -1.0f,//Point G 6
-           3.0f, -0.3f, 1.0f//Point H 7
+           -30.0f, -0.2f, -30.0f,  //Point A 0
+           -30.0f, -0.2f,  30.0f,//Point B 1
+            30.0f, -0.2f, -30.0f,//Point C 2
+            30.0f, -0.2f,  30.0f, //Point D 3
+           -30.0f, -0.3f, -30.0f, //Point E 4
+           -30.0f, -0.3f,  30.0f,//Point F 5
+            30.0f, -0.3f, -30.0f,//Point G 6
+            30.0f, -0.3f,  30.0f//Point H 7
    };
    shapeManager->addBox(new Box(floor, STATIC));
-   shapeManager->rotateIn3D(1, glm::vec3(0, 1, 0));
 
-   shapeManager->addSphere(new Sphere());
-   shapeManager->addSphere(new Sphere());
-   shapeManager->addSphere(new Sphere());
+   //shapeManager->addSphere(new Sphere());
+   //shapeManager->addSphere(new Sphere());
+   //shapeManager->addSphere(new Sphere());
+}
+
+float* getVertices(glm::vec3 pos, glm::vec3 extent) {
+	float* vertices = new float[24] {
+		pos.x - extent.x, pos.y + extent.y, pos.z - extent.z,  //Point A 0
+			pos.x - extent.x, pos.y + extent.y, pos.z + extent.z,//Point B 1
+			pos.x + extent.x, pos.y + extent.y, pos.z - extent.z,//Point C 2
+			pos.x + extent.x, pos.y + extent.y, pos.z + extent.z, //Point D 3
+			pos.x - extent.x, pos.y - extent.y, pos.z - extent.z, //Point E 4
+			pos.x - extent.x, pos.y - extent.y, pos.z + extent.z,//Point F 5
+			pos.x + extent.x, pos.y - extent.y, pos.z - extent.z,//Point G 6
+			pos.x + extent.x, pos.y - extent.y, pos.z + extent.z//Point H 7
+	};
+	return vertices;
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow* window)
 {
-    float xDirection = 0, zDirection = 0;
+    float xDirection = 0, yDirection = 0, zDirection = 0;
     float distance = deltaTime * 2.0f;
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+
+    if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
+    {
+        physicsManager->BlastAtPoint(shapeManager->getSelectedBox()->getCenter(), 5.0f, 4.0f);
+        shapeManager->getSelectedBox()->setColor(glm::vec3(1, 0, 0));
+    }
+    else {
+        shapeManager->getSelectedBox()->setColor(glm::vec3(0, 0, 1));
+    }
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         zDirection = distance;
@@ -186,10 +196,16 @@ void processInput(GLFWwindow* window)
         xDirection = -1 * distance;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         xDirection = distance;
-    if(glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
-        shapeManager->rotateIn3D(1, glm::vec3(0, 1, 0));
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
+        yDirection = -1 * distance;
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        yDirection = distance;
+    if(glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+        shapeManager->rotateIn3D(5, glm::vec3(0, 1, 0));
+    if(glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+        shapeManager->rotateIn3D(-5, glm::vec3(0, 1, 0));
 
-    shapeManager->processTranslation(xDirection, 0, zDirection);
+    shapeManager->processTranslation(xDirection, yDirection, zDirection);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

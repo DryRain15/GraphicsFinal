@@ -6,7 +6,7 @@ ShapeManager::ShapeManager()
     this->basic3DShader = new Shader("3d_shape.vert", "3d_shape.frag");
     this->lightCubeShader = new Shader("lamp.vert", "lamp.frag");
     
-    this->camera = new Camera(glm::vec3(-0.3f, 0.5f, 2.0f));
+    this->camera = new Camera(glm::vec3(-0.3f, 1.1f, -2.0f));
     this->projection = glm::perspective(glm::radians(camera->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
     this->selectedBoxIndex = 0;
     this->selectedSphereIndex = 0;
@@ -79,9 +79,9 @@ void ShapeManager::Destroy() {
 
 void ShapeManager::addBox(Box* box)
 {
+    box->setIndex(this->boxNumber);
     boxes.push_back(box);
     this->boxNumber += 1;
-
 
     PhysicsManager::getInstance()->ResisterPhysicsCollider(box, box->type);
 }
@@ -128,7 +128,7 @@ void ShapeManager::renderAll()
             if (boxes[i]->type == STATIC) continue;
             for (int j = i + 1; j < this->boxNumber; j++) {
                 if (boxes[i]->isCollideWith(boxes[j])) {
-                    cout << "i : " << i << " / j : " <<  j << endl;
+                    //cout << "i : " << i << " / j : " <<  j << endl;
                     CollisionData* collisionData = new CollisionData(boxes[i], boxes[j]);
 					PhysicsManager::getInstance()->RequestCollisionProcessing(collisionData);
                 }
@@ -148,8 +148,8 @@ void ShapeManager::renderAll()
 			glm::vec3 bc = boxes[i]->getCenter();
             //glm::vec3 bc = boxes[i]->getMatrix()[3];
 			spheres[i]->setPosition(bc.x, bc.y, bc.z);
-            cout << i << " : (" << boxes[i]->getCenter().x << ", " << boxes[i]->getCenter().y << ", " << boxes[i]->getCenter().z << ")" 
-                <<  " ~ (" << boxes[i]->getMatrix()[3][0] << ", " << boxes[i]->getMatrix()[3][1] << ", " << boxes[i]->getMatrix()[3][2] << ")" << endl;
+        //    cout << i << " : (" << boxes[i]->getCenter().x << ", " << boxes[i]->getCenter().y << ", " << boxes[i]->getCenter().z << ")" 
+        //        <<  " ~ (" << boxes[i]->getMatrix()[3][0] << ", " << boxes[i]->getMatrix()[3][1] << ", " << boxes[i]->getMatrix()[3][2] << ")" << endl;
         }
 
         lightCubeShader->use();
@@ -174,9 +174,18 @@ void ShapeManager::processTranslation(float directionX, float directionY, float 
 {
     if (this->selectedBoxIndex != -1) {
         boxes[this->selectedBoxIndex]->translation(directionX, directionY, directionZ);
+		boxes[this->selectedBoxIndex]->velocity = glm::vec3(directionX, directionY, directionZ);
         //spheres[this->selectedSphereIndex]->translation(directionX, directionY, directionZ);
 		//moveCamera(directionX, -directionZ);
 	}    
+}
+
+Box* ShapeManager::getSelectedBox()
+{
+	if (this->selectedBoxIndex != -1) {
+		return boxes[this->selectedBoxIndex];
+	}
+	return nullptr;
 }
 
 bool ShapeManager::isValidIndex3d(int index) {
