@@ -1,42 +1,73 @@
 #include "Box.h"
 
-Box::Box(float* vertices, vector<unsigned int> vertexAttributeNumbers, unsigned int eachAttributeNumber, Collider_Type type, float weight, glm::vec3 velocity) : Collider(type, weight, velocity) {
+Box::Box(float* vertexes, Collider_Type type, float weight, glm::vec3 velocity) : Collider(type, weight, velocity) {
+	
+	
+	//this->verticeAttributes = vertices;
 
-	unsigned int* indices = new unsigned int[36] {
-		/*Above ABC,BCD*/
-		0, 1, 2,
-		1, 2, 3,
-		/*Following EFG,FGH*/
-		4, 5, 6,
-		5, 6, 7,
-		/*Left ABF,AEF*/
-		0, 1, 5,
-		0, 4, 5,
-		/*Right side CDH,CGH*/
-		2, 3, 7,
-		2, 6, 7,
-		/*ACG,AEG*/
-		0, 2, 6,
-		0, 4, 6,
-		/*Behind BFH,BDH*/
-		1, 5, 7,
-		1, 3, 7
-	};
-	this->maxPoint = glm::vec3(vertices[9], vertices[10], vertices[11]);
-	this->minPoint = glm::vec3(vertices[12], vertices[13], vertices[14]);
+	/*
+	0 1 2 A
+	3 4 5 B
+	6 7 8 C
+	9 10 11 D 
+	12 13 14 E
+	15 16 17 F
+	18 19 20 G
+	21 22 23 H
+	*/
+	
+	this->maxPoint = glm::vec3(vertexes[9], vertexes[10], vertexes[11]);
+	this->minPoint = glm::vec3(vertexes[12], vertexes[13], vertexes[14]);
 	this->center = (this->maxPoint + this->minPoint) * 0.5f;
-	this->verticeAttributes = vertices;
-	this->indices = indices;
-	this->vertexAttributeNumbers.push_back(3);
-	this->eachAttributeNumber = 3;
-	this->totalVerticeNumber = 8;
-	this->totalIndiceNumber = 36;
-	this->totalCoordinateNumber = eachAttributeNumber * totalVerticeNumber;
+	float vertices[] = {
+		vertexes[12], vertexes[13], vertexes[14], 0.0f, 0.0f, -1.0f,//E
+		vertexes[18], vertexes[19], vertexes[20], 0.0f, 0.0f, -1.0f,// G
+		vertexes[6], vertexes[7], vertexes[8], 0.0f, 0.0f, -1.0f, // C
+		vertexes[6], vertexes[7], vertexes[8], 0.0f, 0.0f, -1.0f,
+		vertexes[0], vertexes[1], vertexes[2], 0.0f, 0.0f, -1.0f, //A
+		vertexes[12], vertexes[13], vertexes[14], 0.0f, 0.0f, -1.0f,
+
+		vertexes[15], vertexes[16], vertexes[17], 0.0f, 0.0f, 1.0f, // F
+		vertexes[21], vertexes[22], vertexes[23], 0.0f, 0.0f, 1.0f, // H
+	    vertexes[9], vertexes[10], vertexes[11], 0.0f, 0.0f, 1.0f, // D
+		vertexes[9], vertexes[10], vertexes[11], 0.0f, 0.0f, 1.0f, //
+		vertexes[3], vertexes[4], vertexes[5], 0.0f, 0.0f, 1.0f, 
+		vertexes[15], vertexes[16], vertexes[17], 0.0f, 0.0f, 1.0f,
+
+		vertexes[3], vertexes[4], vertexes[5], -1.0f, 0.0f, 0.0f, // B
+		vertexes[0], vertexes[1], vertexes[2], -1.0f, 0.0f, 0.0f, // A
+		vertexes[12], vertexes[13], vertexes[14], -1.0f, 0.0f, 0.0f, //E
+		vertexes[12], vertexes[13], vertexes[14], -1.0f, 0.0f, 0.0f, //E
+		vertexes[15], vertexes[16], vertexes[17], -1.0f, 0.0f, 0.0f, // F
+		vertexes[3], vertexes[4], vertexes[5], -1.0f, 0.0f, 0.0f,
+
+		vertexes[9], vertexes[10], vertexes[11], 1.0f, 0.0f, 0.0f, // D
+		vertexes[6], vertexes[7], vertexes[8], 1.0f, 0.0f, 0.0f,// C
+		vertexes[18], vertexes[19], vertexes[20], 1.0f, 0.0f, 0.0f, //G
+		vertexes[18], vertexes[19], vertexes[20], 1.0f, 0.0f, 0.0f,
+		vertexes[21], vertexes[22], vertexes[23], 1.0f, 0.0f, 0.0f, //H
+		vertexes[9], vertexes[10], vertexes[11], 1.0f, 0.0f, 0.0f,
+
+		vertexes[12], vertexes[13], vertexes[14], 0.0f, -1.0f, 0.0f, // E
+		vertexes[18], vertexes[19], vertexes[20], 0.0f, -1.0f, 0.0f, //G
+		vertexes[21], vertexes[22], vertexes[23], 0.0f, -1.0f, 0.0f, // H
+		vertexes[21], vertexes[22], vertexes[23], 0.0f, -1.0f, 0.0f, // H
+		vertexes[15], vertexes[16], vertexes[17], 0.0f, -1.0f, 0.0f, // F
+		vertexes[12], vertexes[13], vertexes[14], 0.0f, -1.0f, 0.0f,
+
+		vertexes[0], vertexes[1], vertexes[2], 0.0f, 1.0f, 0.0f,  // A
+		vertexes[6], vertexes[7], vertexes[8], 0.0f, 1.0f, 0.0f, // C
+		vertexes[9], vertexes[10], vertexes[11], 0.0f, 1.0f, 0.0f,
+		vertexes[9], vertexes[10], vertexes[11], 0.0f, 1.0f, 0.0f,// D
+		vertexes[3], vertexes[4], vertexes[5], 0.0f, 1.0f, 0.0f, // B
+		vertexes[0], vertexes[1], vertexes[2], 0.0f, 1.0f, 0.0f // A
+	};
+	
 	this->color = glm::vec3(1.0, 0.5, 0);
 	this->matrix = glm::mat4(1.0f);
 	this->rotationMatrix = glm::mat4(1.0f);
-	this->translationMatrix = glm::mat4(1.0f);
-	
+
+	// 점 8 개를 216 개로 만들어주는 거 만들기 
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &vbo);
 
