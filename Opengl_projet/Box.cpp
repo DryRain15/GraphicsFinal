@@ -66,6 +66,7 @@ Box::Box(float* vertexes, Collider_Type type, float weight, glm::vec3 velocity) 
 	this->color = glm::vec3(1.0, 0.5, 0);
 	this->matrix = glm::mat4(1.0f);
 	this->rotationMatrix = glm::mat4(1.0f);
+	this->translationMatrix = glm::mat4(1.0f);
 
 	// 점 8 개를 216 개로 만들어주는 거 만들기 
 	glGenVertexArrays(1, &vao);
