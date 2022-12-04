@@ -16,11 +16,14 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void addDefaultObjects();
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 float lastDepth;
 bool firstMouse = true;
+bool isMouseClicked = false;
 
 // timing
 float speed = 0.3f;
@@ -51,6 +54,8 @@ int main()
 
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
 
     // glad:  all OpenGL function pointers
     // ---------------------------------------
@@ -223,3 +228,39 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        isMouseClicked = true;
+        firstMouse = true;
+    }
+
+    if (button == GLFW_MOUSE_BUTTON_LEFT and action == GLFW_RELEASE) {
+        isMouseClicked = false;
+    }
+}
+
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
+{
+    GLbyte color[3];
+    GLfloat colorf[3];
+    GLuint index;
+    GLfloat depth;
+
+    if (isMouseClicked) {
+        float xpos = static_cast<float>(xposIn);
+        float ypos = static_cast<float>(yposIn);
+
+        float xoffset = xpos - lastX;
+        float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+        float normalizedX = xoffset * 2 / SCR_WIDTH;
+        float normalizedY = yoffset * 2 / SCR_HEIGHT;
+
+        shapeManager->moveCamera(xoffset, yoffset);
+        lastX = xpos;
+        lastY = ypos;
+    }
+        
+    }
