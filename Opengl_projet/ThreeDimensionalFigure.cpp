@@ -16,7 +16,7 @@ void ThreeDimensionalFigure::translation(float dx, float dy, float dz)
 	transMatrix[3][0] = dx;
 	transMatrix[3][1] = dy;
 	transMatrix[3][2] = dz;
-	cout << "trannslationn " << endl;
+	cout << "translationn " << endl;
 	cout << dx << " " << dy << " " << dz << endl;
 	this->translationMatrix[3][0] += dx;
 	this->translationMatrix[3][1] += dy;

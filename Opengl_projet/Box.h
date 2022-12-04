@@ -14,6 +14,7 @@ public:
     bool isCollideWith(Box * box);
 	glm::vec3 getCenter();
 	virtual void translation(float directionX, float directionY, float directionZ);
+	void render();
 };
 #endif
 

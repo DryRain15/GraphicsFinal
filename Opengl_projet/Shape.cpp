@@ -6,7 +6,7 @@ void Shape::initiliazeVertexBufferDatas()
 {
 	glGenVertexArrays(1, &(this->vao));
 	glGenBuffers(1, &(this->vbo));
-	glGenBuffers(1, &(this->ebo));
+	//glGenBuffers(1, &(this->ebo));
 
 	glBindVertexArray(this->vao);
 

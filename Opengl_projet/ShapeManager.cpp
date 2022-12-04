@@ -6,6 +6,7 @@ ShapeManager::ShapeManager()
 {
     this->basic2DShader = new Shader("2d_shape.vert", "2d_shape.frag");
     this->basic3DShader = new Shader("3d_shape.vert", "3d_shape.frag");
+    this->lightCubeShader = new Shader("lamp.vert", "lamp.frag");
     
     this->camera = new Camera(glm::vec3(-0.3f, 0.2f, 1.0f));
     this->projection = glm::perspective(glm::radians(camera->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -13,6 +14,51 @@ ShapeManager::ShapeManager()
     this->selectedSphereIndex = 0;
     this->boxNumber = 0;
     this->sphereNumber = 0;
+    float vertices[] = {
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+    };
+    this->lightCube = new Box(vertices);
+
 }
 
 ShapeManager* ShapeManager::getInstance() {
@@ -49,12 +95,19 @@ void ShapeManager::addSphere(Sphere* sphere)
 void ShapeManager::renderAll()
 {  
     // ���߿� �ð��� �� �����丵 �� ��
-   
+
+        glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
         this->basic3DShader->use();
         this->basic3DShader->setMat4("projection", projection);
         this->basic3DShader->setMat4("view", camera->GetViewMatrix());
         this->basic3DShader->setFloat("znear", 0.1);
         this->basic3DShader->setFloat("zfar", 100);
+        this->basic3DShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        this->basic3DShader->setVec3("lightPosition", lightPos);
+        this->basic3DShader->setFloat("ambient", 0.1);
+        this->basic3DShader->setFloat("diffuse", 0.2);
+
+       
 
         glClearStencil(0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -100,6 +153,15 @@ void ShapeManager::renderAll()
             }
         }
 
+        lightCubeShader->use();
+        lightCubeShader->setMat4("projection", projection);
+        lightCubeShader->setMat4("view", camera->GetViewMatrix());
+
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+        lightCubeShader->setMat4("model", model);
+        this->lightCube->render();
 }
 
 void ShapeManager::selectThreeDimensionalFigure(int index)

@@ -94,6 +94,8 @@
     <None Include="shader.vert">
       <Filter>소스 파일\shaders</Filter>
     </None>
+    <None Include="lamp.vert" />
+    <None Include="lamp.frag" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Opengl_projet.rc">

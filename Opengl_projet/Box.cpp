@@ -36,7 +36,22 @@ Box::Box(float* vertices, vector<unsigned int> vertexAttributeNumbers, unsigned 
 	this->matrix = glm::mat4(1.0f);
 	this->rotationMatrix = glm::mat4(1.0f);
 	this->translationMatrix = glm::mat4(1.0f);
-	this->initiliazeVertexBufferDatas();
+	
+	glGenVertexArrays(1, &vao);
+	glGenBuffers(1, &vbo);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	// 216
+	glBufferData(GL_ARRAY_BUFFER, 216 * sizeof(float), vertices, GL_STATIC_DRAW);
+
+	glBindVertexArray(vao);
+
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 }
 
 bool Box::isCollideWith(Box * box)
@@ -62,4 +77,10 @@ void Box::translation(float directionX, float directionY, float directionZ)
 
 glm::vec3 Box::getCenter() {
 	return this->center;
+}
+
+void Box::render() {
+	cout << "box box" << endl;
+ 	glBindVertexArray(vao);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
