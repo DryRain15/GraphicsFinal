@@ -16,31 +16,12 @@ void ThreeDimensionalFigure::translation(float dx, float dy, float dz)
 	transMatrix[3][0] = dx;
 	transMatrix[3][1] = dy;
 	transMatrix[3][2] = dz;
-	cout << "translationn " << endl;
-	cout << dx << " " << dy << " " << dz << endl;
+
 	this->translationMatrix[3][0] += dx;
 	this->translationMatrix[3][1] += dy;
 	this->translationMatrix[3][2] += dz;
 
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			cout << rotationMatrix[i][j] << " ";
-		}
-		cout << endl;
-	}
-
-
-
 	this->matrix = this->translationMatrix * this->rotationMatrix;
-
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			cout << matrix[i][j] << " ";
-		}
-		cout << endl;
-	}
-
-
 }
 
 void ThreeDimensionalFigure::scale(float svalue, int index)

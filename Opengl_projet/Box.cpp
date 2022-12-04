@@ -112,7 +112,6 @@ glm::vec3 Box::getCenter() {
 }
 
 void Box::render() {
-	cout << "box box" << endl;
  	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 }

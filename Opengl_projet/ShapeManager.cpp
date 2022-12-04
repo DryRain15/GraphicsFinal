@@ -94,8 +94,6 @@ void ShapeManager::addSphere(Sphere* sphere)
 
 void ShapeManager::renderAll()
 {  
-    // ���߿� �ð��� �� �����丵 �� ��
-
         glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
         this->basic3DShader->use();
         this->basic3DShader->setMat4("projection", projection);
@@ -107,15 +105,13 @@ void ShapeManager::renderAll()
         this->basic3DShader->setFloat("ambient", 0.1);
         this->basic3DShader->setFloat("diffuse", 0.2);
 
-       
-
         glClearStencil(0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
         glEnable(GL_DEPTH_TEST);
         GLenum err = glGetError();
         if (err != GL_NO_ERROR)
-            cout << "Error";
+            cout << err;
         glEnable(GL_STENCIL_TEST);
         glDepthFunc(GL_LESS);
         glDepthRange(0.1, 100);
@@ -147,21 +143,11 @@ void ShapeManager::renderAll()
         for (int i = 0; i < this->sphereNumber; i++) {
             for (int j = i + 1; j < this->sphereNumber; j++) {
                 if (spheres[i]->isCollideWith(spheres[j])) {
-                    cout << "i " << i << "j " << j << endl;
+                    //cout << "i " << i << "j " << j << endl;
                     CollisionData* collisionData = new CollisionData(spheres[i], spheres[j]);
                 }
             }
         }
-
-        lightCubeShader->use();
-        lightCubeShader->setMat4("projection", projection);
-        lightCubeShader->setMat4("view", camera->GetViewMatrix());
-
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, lightPos);
-        model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-        lightCubeShader->setMat4("model", model);
-        this->lightCube->render();
 }
 
 void ShapeManager::selectThreeDimensionalFigure(int index)
@@ -177,8 +163,6 @@ void ShapeManager::processTranslation(float directionX, float directionY, float 
         boxes[this->selectedBoxIndex]->translation(directionX, directionY, directionZ);
         //spheres[this->selectedSphereIndex]->translation(directionX, directionY, directionZ);
     }
-   
-    
 }
 
 bool ShapeManager::isValidIndex3d(int index) {
