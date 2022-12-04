@@ -6,7 +6,7 @@
 class ThreeDimensionalFigure: public Shape
 {
 protected:
-	glm::mat4 rotationMatrix;
+	
 public:
 	ThreeDimensionalFigure& operator=(const ThreeDimensionalFigure& threeDimensionalFigure);
 	virtual void translation(float dx, float dy, float dz);

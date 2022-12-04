@@ -143,6 +143,8 @@ void processInput(GLFWwindow* window)
         xDirection = -1 * distance;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         xDirection = distance;
+    if(glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+        shapeManager->rotateIn3D(1, glm::vec3(0, 1, 0));
 
     shapeManager->processTranslation(xDirection, 0, zDirection);
 }

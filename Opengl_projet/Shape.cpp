@@ -56,6 +56,8 @@ Shape::Shape(float* vertices, vector<unsigned int> & vertexAttributeNumbers, uns
 	this->indices = indices;
 	this->color = glm::vec3(0, 0, 1);
 	this->matrix = glm::mat4(1.0f);
+	this->rotationMatrix = glm::mat4(1.0f);
+	this->translationMatrix = glm::mat4(1.0f);
 	this->initiliazeVertexBufferDatas();
 
 }

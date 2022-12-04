@@ -16,8 +16,9 @@ void ThreeDimensionalFigure::translation(float dx, float dy, float dz)
 	transMatrix[3][0] = dx;
 	transMatrix[3][1] = dy;
 	transMatrix[3][2] = dz;
-
-	this->matrix = transMatrix * this->matrix;
+	cout << "trannslationn " << endl;
+	this->translationMatrix = transMatrix * this->translationMatrix;
+	this->matrix = this->translationMatrix * this->rotationMatrix;
 }
 
 void ThreeDimensionalFigure::scale(float svalue, int index)
@@ -32,8 +33,9 @@ void ThreeDimensionalFigure::rotate(float rotationAngle, glm::vec3 rotationAxis)
 	glm::quat quaternion;
 	float angle = (rotationAngle * 3.14 / 180.0);
 	quaternion = glm::angleAxis(angle, rotationAxis);
-	mat4 rotationMatrix = glm::toMat4(quaternion);
-	this->matrix = rotationMatrix * this->matrix;
+	mat4 rotateMatrix = glm::toMat4(quaternion);
+	this->rotationMatrix = rotateMatrix * this->rotationMatrix;
+	this->matrix = this->translationMatrix * this->rotationMatrix;
 }
 
 void ThreeDimensionalFigure::transformation(glm::mat3 newMatrix)

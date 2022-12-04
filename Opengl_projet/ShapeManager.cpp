@@ -50,7 +50,6 @@ void ShapeManager::renderAll()
 {  
     // ���߿� �ð��� �� �����丵 �� ��
    
-  
         this->basic3DShader->use();
         this->basic3DShader->setMat4("projection", projection);
         this->basic3DShader->setMat4("view", camera->GetViewMatrix());
@@ -77,8 +76,7 @@ void ShapeManager::renderAll()
         for (int i = 0; i < this->boxNumber; i++) {
             for (int j = i + 1; j < this->boxNumber; j++) {
                 if (boxes[i]->isCollideWith(boxes[j])) {
-                    //cout << "i " << i << "j " <<  j << endl;
-                    
+                   
                     CollisionData* collisionData = new CollisionData(boxes[i], boxes[j]);
                 }
             }
