@@ -50,12 +50,12 @@ private:
 					it->first->velocity *= 1 - dt;
 					it->first->velocity += GRAVITY * dt;
 
-					glm::vec3 v = it->first->velocity;
+					glm::vec3 v = it->first->velocity * dt;
 					glm::quat r = it->first->angularVelocity;
 
 					//cout << v.y << endl;
 
-					it->first->translation(dt, dt, dt);
+					it->first->translation(v.x, v.y, v.z);
 					it->first->rotate(r);
 					break;
 				}
@@ -77,9 +77,8 @@ private:
 	void ProcessCollision(float dt) {
 		while (!dataStack.empty()) {
 			CollisionData* data = dataStack.top();
-			dataStack.pop();
-
 			ProcessCollsionInternal(data, dt);
+			dataStack.pop();
 		}
 	}
 

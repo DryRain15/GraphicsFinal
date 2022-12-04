@@ -1,6 +1,6 @@
 #include "Box.h"
 
-Box::Box(float* vertices, vector<unsigned int> vertexAttributeNumbers, unsigned int eachAttributeNumber, Collider_Type type, float weight, glm::vec3 velocity) : Collider(type, weight, velocity) {
+Box::Box(float* vertices, Collider_Type type, float weight, glm::vec3 velocity) : Collider(type, weight, velocity) {
 
 	unsigned int* indices = new unsigned int[36] {
 		/*Above ABC,BCD*/
@@ -22,12 +22,11 @@ Box::Box(float* vertices, vector<unsigned int> vertexAttributeNumbers, unsigned 
 		1, 5, 7,
 		1, 3, 7
 	};
-	this->maxPoint = glm::vec3(vertices[9], vertices[10], vertices[11]);
-	this->minPoint = glm::vec3(vertices[12], vertices[13], vertices[14]);
+	this->maxPoint = glm::vec3(vertices[48], vertices[49], vertices[50]);
+	this->minPoint = glm::vec3(vertices[0], vertices[1], vertices[2]);
 	this->center = (this->maxPoint + this->minPoint) * 0.5f;
 	this->verticeAttributes = vertices;
 	this->indices = indices;
-	this->vertexAttributeNumbers.push_back(3);
 	this->eachAttributeNumber = 3;
 	this->totalVerticeNumber = 8;
 	this->totalIndiceNumber = 36;
@@ -53,8 +52,11 @@ Box::Box(float* vertices, vector<unsigned int> vertexAttributeNumbers, unsigned 
 	// normal attribute
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
-}
 
+	this->translationMatrix[3][0] = this->center.x;
+	this->translationMatrix[3][1] = this->center.y;
+	this->translationMatrix[3][2] = this->center.z;
+}
 /*
 bool Box::isCollideWith(Box * box)
 {
@@ -71,11 +73,11 @@ bool Box::isCollideWith(Box * box)
 bool Box::isCollideWith(Box* box)
 {
 	// Compute rotation matrix expressing box1 in box2's coordinate frame
-	glm::mat3 R = glm::mat3(box->getMatrix()) * glm::transpose(glm::mat3(this->getMatrix()));
+	glm::mat3 R = glm::mat3(box->getRotationMatrix()) * glm::transpose(glm::mat3(this->getRotationMatrix()));
 
 	glm::vec3 T = box->center - this->center;
 	// Bring translation into box2's coordinate frame
-	T = glm::vec3(glm::dot(T, glm::vec3(box->getMatrix()[0])), glm::dot(T, glm::vec3(box->getMatrix()[1])), glm::dot(T, glm::vec3(box->getMatrix()[2])));
+	T = glm::vec3(glm::dot(T, glm::vec3(box->translationMatrix[0])), glm::dot(T, glm::vec3(box->translationMatrix[1])), glm::dot(T, glm::vec3(box->translationMatrix[2])));
 
 	// Compute common subexpressions. Add in an epsilon term to
 	// counteract arithmetic errors when two edges are parallel and
@@ -83,7 +85,7 @@ bool Box::isCollideWith(Box* box)
 	glm::vec3 absR[3];
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
-			absR[i][j] = abs(R[i][j]) + FLT_EPSILON;
+			absR[i][j] = (R[i][j]) + FLT_EPSILON;
 
 	glm::vec3 extentThis = (this->maxPoint - this->minPoint) / 2.0f;
 	glm::vec3 extentOther = (box->maxPoint - box->minPoint) / 2.0f;
@@ -123,15 +125,19 @@ bool Box::isCollideWith(Box* box)
 	return true;
 }
 
-
 void Box::translation(float directionX, float directionY, float directionZ)
 {
-	float dx = directionX * velocity.x;
-	float dy = directionY * velocity.y;
-	float dz = directionZ * velocity.z;
+	float dx = directionX;
+	float dy = directionY;
+	float dz = directionZ;
+	ThreeDimensionalFigure::translation(dx, dy, dz);
 	this->minPoint = glm::vec3(minPoint.x + dx, minPoint.y + dy, minPoint.z + dz);
 	this->maxPoint = glm::vec3(maxPoint.x + dx, maxPoint.y + dy, maxPoint.z + dz);
 	this->center = this->center + glm::vec3(dx, dy, dz);
+
+	cout << "Translation : C(" << getCenter().x << ", " << getCenter().y << ", " << getCenter().z << ")"
+		<< " ~ M(" << getMatrix()[3][0] << ", " << getMatrix()[3][1] << ", " << getMatrix()[3][2] << ")" << endl;
+
 }
 
 glm::vec3 Box::getCenter() {
@@ -182,9 +188,9 @@ void Box::applyExternalMomentumAtPoint(glm::vec3 point, glm::vec3 momentum) {
 	// one is the vector which is from point to center
 	// another is the vector which is perpendicular to the first one and will applied to angular momentum
 	glm::vec3* result = new glm::vec3[2];
-	glm::vec3 distance = point - this->center;
+	glm::vec3 distance = this->center- point;
 	glm::vec3 pointToCenterNormalized = getVelocityNormalized(distance);
-	glm::vec3 momentumToCenter = glm::dot(momentum, pointToCenterNormalized) * pointToCenterNormalized;
+	glm::vec3 momentumToCenter = glm::dot(momentum, pointToCenterNormalized) * glm::abs(pointToCenterNormalized);
 	glm::vec3 momentumToAngular = momentum - momentumToCenter;
 	this->velocity = momentumToCenter / this->weight;
 
@@ -233,7 +239,6 @@ glm::vec3 Box::getIntersectionPoint(glm::vec3 line)
 	}
 }
 void Box::render() {
-	cout << "box box" << endl;
  	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 }

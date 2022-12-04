@@ -36,6 +36,7 @@ public:
 	virtual void render();
 	void setShaderValue(Shader* shader);
 	glm::mat4 getMatrix();
+	void setColor(glm::vec3 color);
 };
 
 #endif

@@ -110,70 +110,145 @@ int main(int argc, char **argv)
 
 // �ڽ� collision test 
 void addDefaultObjects() {
-   float* vertices = new float[24] {
-        -0.35f, 0.2f, -0.1f,  //Point A 0
-        -0.35f, 0.2f, 0.1f,//Point B 1
-        -0.15f, 0.2f, -0.1f,//Point C 2
-        -0.15f, 0.2f, 0.1f, //Point D 3
-        -0.35f, 0.0f, -0.1f, //Point E 4
-        -0.35f, 0.0f, 0.1f,//Point F 5
-        -0.15f, 0.0f, -0.1f,//Point G 6
-        -0.15f, 0.0f, 0.1f//Point H 7
-   };
-    shapeManager->addBox(new Box(vertices, { 3 }, 3, KINEMETIC));
-	
-    float* secondVertices = new float[24] {
-        -0.1f, 1.6f, -0.1f,  //Point A 0
-        -0.1f, 1.6f, 0.1f,//Point B 1
-        0.1f, 1.6f, -0.1f,//Point C 2
-        0.1f, 1.6f, 0.1f, //Point D 3
-        -0.1f, 1.4f, -0.1f, //Point E 4
-        -0.1f, 1.4f, 0.1f,//Point F 5
-        0.1f, 1.4f, -0.1f,//Point G 6
-        0.1f, 1.4f, 0.1f//Point H 7
-    };
-   shapeManager->addBox(new Box(secondVertices, { 3 }, 3, DYNAMIC));
-   
-	
-    float* thVertices = new float[24] {
-        -0.1f, 1.0f, -0.1f,  //Point A 0
-        -0.1f, 1.0f, 0.1f,//Point B 1
-        0.1f, 1.0f, -0.1f,//Point C 2
-        0.1f, 1.0f, 0.1f, //Point D 3
-        -0.1f, 0.8f, -0.1f, //Point E 4
-        -0.1f, 0.8f, 0.1f,//Point F 5
-        0.1f, 0.8f, -0.1f,//Point G 6
-        0.1f, 0.8f, 0.1f//Point H 7
-    };
-   shapeManager->addBox(new Box(thVertices, { 3 }, 3, DYNAMIC));
-   
-	
-    float* ftVertices = new float[24] {
-        -0.1f, 0.6f, -0.1f,  //Point A 0
-        -0.1f, 0.6f, 0.1f,//Point B 1
-        0.1f, 0.6f, -0.1f,//Point C 2
-        0.1f, 0.6f, 0.1f, //Point D 3
-        -0.1f, 0.4f, -0.1f, //Point E 4
-        -0.1f, 0.4f, 0.1f,//Point F 5
-        0.1f, 0.4f, -0.1f,//Point G 6
-        0.1f, 0.4f, 0.1f//Point H 7
-    };
-   shapeManager->addBox(new Box(ftVertices, { 3 }, 3, DYNAMIC));
+    float vertices[] = {
+         -0.1f, -0.1f, -0.1f, 0.0f, 0.0f, -1.0f,
+         0.1f, -0.1f, -0.1f, 0.0f, 0.0f, -1.0f,
+         0.1f, 0.1f, -0.1f, 0.0f, 0.0f, -1.0f,
+         0.1f, 0.1f, -0.1f, 0.0f, 0.0f, -1.0f,
+         -0.1f, 0.1f, -0.1f, 0.0f, 0.0f, -1.0f,
+         -0.1f, -0.1f, -0.1f, 0.0f, 0.0f, -1.0f,
 
-   float* floor = new float[24] {
-        -3.0f, -0.2f, -1.0f,  //Point A 0
-        -3.0f, -0.2f, 1.0f,//Point B 1
-        3.0f, -0.2f, -1.0f,//Point C 2
-        3.0f, -0.2f, 1.0f, //Point D 3
-        -3.0f, -0.3f, -1.0f, //Point E 4
-        -3.0f, -0.3f, 1.0f,//Point F 5
-        3.0f, -0.3f, -1.0f,//Point G 6
-        3.0f, -0.3f, 1.0f//Point H 7
+         -0.1f, -0.1f, 0.1f, 0.0f, 0.0f, 1.0f,
+         0.1f, -0.1f, 0.1f, 0.0f, 0.0f, 1.0f,
+         0.1f, 0.1f, 0.1f, 0.0f, 0.0f, 1.0f,
+         0.1f, 0.1f, 0.1f, 0.0f, 0.0f, 1.0f,
+         -0.1f, 0.1f, 0.1f, 0.0f, 0.0f, 1.0f,
+         -0.1f, -0.1f, 0.1f, 0.0f, 0.0f, 1.0f,
+
+         -0.1f, 0.1f, 0.1f, -1.0f, 0.0f, 0.0f,
+         -0.1f, 0.1f, -0.1f, -1.0f, 0.0f, 0.0f,
+         -0.1f, -0.1f, -0.1f, -1.0f, 0.0f, 0.0f,
+         -0.1f, -0.1f, -0.1f, -1.0f, 0.0f, 0.0f,
+         -0.1f, -0.1f, 0.1f, -1.0f, 0.0f, 0.0f,
+         -0.1f, 0.1f, 0.1f, -1.0f, 0.0f, 0.0f,
+
+         0.1f, 0.1f, 0.1f, 1.0f, 0.0f, 0.0f,
+         0.1f, 0.1f, -0.1f, 1.0f, 0.0f, 0.0f,
+         0.1f, -0.1f, -0.1f, 1.0f, 0.0f, 0.0f,
+         0.1f, -0.1f, -0.1f, 1.0f, 0.0f, 0.0f,
+         0.1f, -0.1f, 0.1f, 1.0f, 0.0f, 0.0f,
+         0.1f, 0.1f, 0.1f, 1.0f, 0.0f, 0.0f,
+
+         -0.1f, -0.1f, -0.1f, 0.0f, -1.0f, 0.0f,
+         0.1f, -0.1f, -0.1f, 0.0f, -1.0f, 0.0f,
+         0.1f, -0.1f, 0.1f, 0.0f, -1.0f, 0.0f,
+         0.1f, -0.1f, 0.1f, 0.0f, -1.0f, 0.0f,
+         -0.1f, -0.1f, 0.1f, 0.0f, -1.0f, 0.0f,
+         -0.1f, -0.1f, -0.1f, 0.0f, -1.0f, 0.0f,
+
+         -0.1f, 0.1f, -0.1f, 0.0f, 1.0f, 0.0f,
+         0.1f, 0.1f, -0.1f, 0.0f, 1.0f, 0.0f,
+         0.1f, 0.1f, 0.1f, 0.0f, 1.0f, 0.0f,
+         0.1f, 0.1f, 0.1f, 0.0f, 1.0f, 0.0f,
+         -0.1f, 0.1f, 0.1f, 0.0f, 1.0f, 0.0f,
+         -0.1f, 0.1f, -0.1f, 0.0f, 1.0f, 0.0f
+    };
+    shapeManager->addBox(new Box(vertices, KINEMETIC));
+	
+   float secondVertices[] = {
+       -0.3f, 0.2f, -0.1f, 0.0f, 0.0f, -1.0f,
+       -0.1f, 0.2f, -0.1f, 0.0f, 0.0f, -1.0f,
+       -0.1f, 0.4f, -0.1f, 0.0f, 0.0f, -1.0f,
+       -0.1f, 0.4f, -0.1f, 0.0f, 0.0f, -1.0f,
+       -0.3f, 0.4f, -0.1f, 0.0f, 0.0f, -1.0f,
+       -0.3f, 0.2f, -0.1f, 0.0f, 0.0f, -1.0f,
+
+       -0.3f, 0.2f, 0.1f, 0.0f, 0.0f, 1.0f,
+       -0.1f, 0.2f, 0.1f, 0.0f, 0.0f, 1.0f,
+       -0.1f, 0.4f, 0.1f, 0.0f, 0.0f, 1.0f,
+       -0.1f, 0.4f, 0.1f, 0.0f, 0.0f, 1.0f,
+       -0.3f, 0.4f, 0.1f, 0.0f, 0.0f, 1.0f,
+       -0.3f, 0.2f, 0.1f, 0.0f, 0.0f, 1.0f,
+
+       -0.3f, 0.4f, 0.1f, -1.0f, 0.0f, 0.0f,
+       -0.3f, 0.4f, -0.1f, -1.0f, 0.0f, 0.0f,
+       -0.3f, 0.2f, -0.1f, -1.0f, 0.0f, 0.0f,
+       -0.3f, 0.2f, -0.1f, -1.0f, 0.0f, 0.0f,
+       -0.3f, 0.2f, 0.1f, -1.0f, 0.0f, 0.0f,
+       -0.3f, 0.4f, 0.1f, -1.0f, 0.0f, 0.0f,
+
+       -0.1f, 0.4f, 0.1f, 1.0f, 0.0f, 0.0f,
+       -0.1f, 0.4f, -0.1f, 1.0f, 0.0f, 0.0f,
+       -0.1f, 0.2f, -0.1f, 1.0f, 0.0f, 0.0f,
+       -0.1f, 0.2f, -0.1f, 1.0f, 0.0f, 0.0f,
+       -0.1f, 0.2f, 0.1f, 1.0f, 0.0f, 0.0f,
+       -0.1f, 0.4f, 0.1f, 1.0f, 0.0f, 0.0f,
+
+       -0.3f, 0.2f, -0.1f, 0.0f, -1.0f, 0.0f,
+       -0.1f, 0.2f, -0.1f, 0.0f, -1.0f, 0.0f,
+       -0.1f, 0.2f, 0.1f, 0.0f, -1.0f, 0.0f,
+       -0.1f, 0.2f, 0.1f, 0.0f, -1.0f, 0.0f,
+       -0.3f, 0.2f, 0.1f, 0.0f, -1.0f, 0.0f,
+       -0.3f, 0.2f, -0.1f, 0.0f, -1.0f, 0.0f,
+
+       -0.3f, 0.4f, -0.1f, 0.0f, 1.0f, 0.0f,
+       -0.1f, 0.4f, -0.1f, 0.0f, 1.0f, 0.0f,
+       -0.1f, 0.4f, 0.1f, 0.0f, 1.0f, 0.0f,
+       -0.1f, 0.4f, 0.1f, 0.0f, 1.0f, 0.0f,
+       -0.3f, 0.4f, 0.1f, 0.0f, 1.0f, 0.0f,
+       -0.3f, 0.4f, -0.1f, 0.0f, 1.0f, 0.0f
    };
-   shapeManager->addBox(new Box(floor, { 3 }, 3, STATIC));
+   shapeManager->addBox(new Box(secondVertices, DYNAMIC));
+   
+   float floor[] = {
+       -3.0f, -0.4f, -1.1f, 0.0f, 0.0f, -1.0f,
+       3.0f, -0.4f, -1.1f, 0.0f, 0.0f, -1.0f,
+       3.0f, -0.2f, -1.1f, 0.0f, 0.0f, -1.0f,
+       3.0f, -0.2f, -1.1f, 0.0f, 0.0f, -1.0f,
+       -3.0f, -0.2f, -1.1f, 0.0f, 0.0f, -1.0f,
+       -3.0f, -0.4f, -1.1f, 0.0f, 0.0f, -1.0f,
+
+       -3.0f, -0.4f, 1.1f, 0.0f, 0.0f, 1.0f,
+       3.0f, -0.4f, 1.1f, 0.0f, 0.0f, 1.0f,
+       3.0f, -0.2f, 1.1f, 0.0f, 0.0f, 1.0f,
+       3.0f, -0.2f, 1.1f, 0.0f, 0.0f, 1.0f,
+       -3.0f, -0.2f, 1.1f, 0.0f, 0.0f, 1.0f,
+       -3.0f, -0.4f, 1.1f, 0.0f, 0.0f, 1.0f,
+
+       -3.0f, -0.2f, 1.1f, -1.0f, 0.0f, 0.0f,
+       -3.0f, -0.2f, -1.1f, -1.0f, 0.0f, 0.0f,
+       -3.0f, -0.4f, -1.1f, -1.0f, 0.0f, 0.0f,
+       -3.0f, -0.4f, -1.1f, -1.0f, 0.0f, 0.0f,
+       -3.0f, -0.4f, 1.1f, -1.0f, 0.0f, 0.0f,
+       -3.0f, -0.2f, 1.1f, -1.0f, 0.0f, 0.0f,
+
+       3.0f, -0.2f, 1.1f, 1.0f, 0.0f, 0.0f,
+       3.0f, -0.2f, -1.1f, 1.0f, 0.0f, 0.0f,
+       3.0f, -0.4f, -1.1f, 1.0f, 0.0f, 0.0f,
+       3.0f, -0.4f, -1.1f, 1.0f, 0.0f, 0.0f,
+       3.0f, -0.4f, 1.1f, 1.0f, 0.0f, 0.0f,
+       3.0f, -0.2f, 1.1f, 1.0f, 0.0f, 0.0f,
+
+       -3.0f, -0.4f, -1.1f, 0.0f, -1.0f, 0.0f,
+       3.0f, -0.4f, -1.1f, 0.0f, -1.0f, 0.0f,
+       3.0f, -0.4f, 1.1f, 0.0f, -1.0f, 0.0f,
+       3.0f, -0.4f, 1.1f, 0.0f, -1.0f, 0.0f,
+       -3.0f, -0.4f, 1.1f, 0.0f, -1.0f, 0.0f,
+       -3.0f, -0.4f, -1.1f, 0.0f, -1.0f, 0.0f,
+
+       -3.0f,-0.2f, -1.1f, 0.0f, 1.0f, 0.0f,
+       3.0f, -0.2f, -1.1f, 0.0f, 1.0f, 0.0f,
+       3.0f, -0.2f, 1.1f, 0.0f, 1.0f, 0.0f,
+       3.0f, -0.2f, 1.1f, 0.0f, 1.0f, 0.0f,
+       -3.0f, -0.2f, 1.1f, 0.0f, 1.0f, 0.0f,
+       -3.0f, -0.2f, -1.1f, 0.0f, 1.0f, 0.0f
+   };
+   shapeManager->addBox(new Box(floor, STATIC));
    shapeManager->rotateIn3D(1, glm::vec3(0, 1, 0));
-   //shapeManager->addSphere(new Sphere());
-   //shapeManager->addSphere(new Sphere(glm::vec3(-0.3, 0.5, 0)));
+
+   shapeManager->addSphere(new Sphere());
+   shapeManager->addSphere(new Sphere());
+   shapeManager->addSphere(new Sphere());
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly

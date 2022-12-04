@@ -54,6 +54,9 @@
     <ClCompile Include="PhysicsManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="InternalEnergy.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -92,6 +95,9 @@
     <ClInclude Include="PhysicsManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="InternalEnergy.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag">
@@ -102,6 +108,18 @@
     </None>
     <None Include="lamp.vert" />
     <None Include="lamp.frag" />
+    <None Include="3d_shape.vert">
+      <Filter>소스 파일\shaders</Filter>
+    </None>
+    <None Include="2d_shape.vert">
+      <Filter>소스 파일\shaders</Filter>
+    </None>
+    <None Include="3d_shape.frag">
+      <Filter>소스 파일\shaders</Filter>
+    </None>
+    <None Include="2d_shape.frag">
+      <Filter>소스 파일\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Opengl_projet.rc">

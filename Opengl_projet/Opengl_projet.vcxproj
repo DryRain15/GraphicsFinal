@@ -173,6 +173,10 @@
     <ClInclude Include="ThreeDimensionalFigure.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="2d_shape.frag" />
+    <None Include="2d_shape.vert" />
+    <None Include="3d_shape.frag" />
+    <None Include="3d_shape.vert" />
     <None Include="lamp.frag" />
     <None Include="lamp.vert" />
     <None Include="shader.frag" />

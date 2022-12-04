@@ -115,3 +115,7 @@ glm::mat4 Shape::getMatrix()
 	return this->matrix;
 }
 
+void Shape::setColor(glm::vec3 color)
+{
+	this->color = color;
+}

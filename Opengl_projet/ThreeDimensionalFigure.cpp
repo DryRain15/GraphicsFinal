@@ -49,7 +49,7 @@ void ThreeDimensionalFigure::transformation(glm::mat3 newMatrix)
 {
 	glm::mat4 rotationMatrix(1);
 	rotationMatrix[3][3] = 1;
-    this->matrix = rotationMatrix * this->matrix;
+	this->matrix = this->translationMatrix * this->rotationMatrix;
 }
 
 void ThreeDimensionalFigure::setPosition(float dx, float dy, float dz) {

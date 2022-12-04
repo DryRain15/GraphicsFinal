@@ -75,7 +75,7 @@ private:
 	}
 
 public:
-	Box(float* vertices, vector<unsigned int> vertexAttributeNumbers = { 3}, unsigned int eachAttributeNumber = 3, Collider_Type type  = DYNAMIC, float weight = 1, glm::vec3 velocity = glm::vec3(0.3));
+	Box(float* vertices, Collider_Type type  = DYNAMIC, float weight = 1, glm::vec3 velocity = glm::vec3(0));
     bool isCollideWith(Box * box);
 	glm::vec3 getCenter();
 	glm::vec3 getDirectionalMomentumAtPoint(glm::vec3 point);

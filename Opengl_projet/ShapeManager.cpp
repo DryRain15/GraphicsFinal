@@ -6,7 +6,7 @@ ShapeManager::ShapeManager()
     this->basic3DShader = new Shader("3d_shape.vert", "3d_shape.frag");
     this->lightCubeShader = new Shader("lamp.vert", "lamp.frag");
     
-    this->camera = new Camera(glm::vec3(-0.3f, 0.4f, 2.0f));
+    this->camera = new Camera(glm::vec3(-0.3f, 0.5f, 2.0f));
     this->projection = glm::perspective(glm::radians(camera->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
     this->selectedBoxIndex = 0;
     this->selectedSphereIndex = 0;
@@ -106,12 +106,6 @@ void ShapeManager::renderAll()
         this->basic3DShader->setVec3("lightPosition", lightPos);
         this->basic3DShader->setFloat("ambient", 0.1);
         this->basic3DShader->setFloat("diffuse", 0.2);
-
-       
-
-        // world transformation
-        glm::mat4 model = glm::mat4(1.0f);
-        this->basic3DShader->setMat4("model", model);
 		
         glClearStencil(0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -149,14 +143,13 @@ void ShapeManager::renderAll()
             spheres[i]->setShaderValue(this->basic3DShader);
             spheres[i]->render();
         }
-        /*
+        
         for (int i = 0; i < this->sphereNumber; i++) {
-            for (int j = i + 1; j < this->sphereNumber; j++) {
-                if (spheres[i]->isCollideWith(spheres[j])) {
-                    cout << "i " << i << "j " << j << endl;
-                    CollisionData* collisionData = new CollisionData(spheres[i], spheres[j]);
-                }
-            }
+			glm::vec3 bc = boxes[i]->getCenter();
+            //glm::vec3 bc = boxes[i]->getMatrix()[3];
+			spheres[i]->setPosition(bc.x, bc.y, bc.z);
+            cout << i << " : (" << boxes[i]->getCenter().x << ", " << boxes[i]->getCenter().y << ", " << boxes[i]->getCenter().z << ")" 
+                <<  " ~ (" << boxes[i]->getMatrix()[3][0] << ", " << boxes[i]->getMatrix()[3][1] << ", " << boxes[i]->getMatrix()[3][2] << ")" << endl;
         }
 
         lightCubeShader->use();
