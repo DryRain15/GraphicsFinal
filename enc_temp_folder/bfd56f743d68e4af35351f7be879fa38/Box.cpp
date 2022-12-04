@@ -58,6 +58,11 @@ void Box::translation(float directionX, float directionY, float directionZ)
 	this->minPoint = glm::vec3(minPoint.x + dx, minPoint.y + dy, minPoint.z + dz);
 	this->maxPoint = glm::vec3(maxPoint.x + dx, maxPoint.y + dy, maxPoint.z + dz);
 	this->center = this->center + glm::vec3(dx, dy, dz);
+	cout << " center translation" << endl;
+	cout << this->center[0] << " " << center[1] << " " << center[2] << endl;
+
+
+	cout << this->translationMatrix[3][0] << " " << this->translationMatrix[3][1] << this->translationMatrix[3][2] << endl;
 }
 
 glm::vec3 Box::getCenter() {

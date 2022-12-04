@@ -146,7 +146,7 @@ void processInput(GLFWwindow* window)
     if(glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
         shapeManager->rotateIn3D(1, glm::vec3(0, 1, 0));
 
-    shapeManager->processTranslation(xDirection, 0, zDirection);
+    shapeManager->processTranslation(xDirection, zDirection, 0);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
