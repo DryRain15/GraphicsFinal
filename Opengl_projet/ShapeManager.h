@@ -18,12 +18,15 @@ private:
 	vector<Sphere*> spheres;
 	Shader* basic2DShader;
 	Shader* basic3DShader;
+	Shader* lightCubeShader;
 	int boxNumber;
 	int sphereNumber;
 	int selectedBoxIndex;
 	int selectedSphereIndex;
+	GLuint lightCubeVAO;
 	// camera
 	Camera * camera;
+	Box* lightCube;
 	glm::mat4 projection;
 	static void Destroy();
 	bool isValidIndex3d(int index);

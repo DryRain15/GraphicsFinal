@@ -86,6 +86,7 @@ public:
 	void resetMomentum(float defaultValue);
 	void applyExternalMomentumAtPoint(glm::vec3 point, glm::vec3 externalMomentum);
 	virtual void translation(float directionX, float directionY, float directionZ);
+	void render();
 };
 #endif
 
