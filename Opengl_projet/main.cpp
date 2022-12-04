@@ -115,31 +115,53 @@ int main(int argc, char **argv)
 
 // collision test 
 void addDefaultObjects() {
-    float vertices[] = {
-         -0.1,0.1,-0.1,  //Point A 0
-        -0.1,0.1,0.1,  //Point B 1
-        0.1,0.1,-0.1, //Point C 2
-        0.1,0.1,0.1, //Point D 3
-
-        -0.1,-0.1,-0.1, //Point E 4
-        -0.1,-0.1,0.1,  //Point F 5
-        0.1,-0.1,-0.1,  //Point G 6
-        0.1,-0.1,0.1,   //Point H 7
+    float* vertices = new float[24] {
+        -0.35f, 0.2f, -0.1f,  //Point A 0
+            -0.35f, 0.2f, 0.1f,//Point B 1
+            -0.15f, 0.2f, -0.1f,//Point C 2
+            -0.15f, 0.2f, 0.1f, //Point D 3
+            -0.35f, 0.0f, -0.1f, //Point E 4
+            -0.35f, 0.0f, 0.1f,//Point F 5
+            -0.15f, 0.0f, -0.1f,//Point G 6
+            -0.15f, 0.0f, 0.1f//Point H 7
     };
-   shapeManager->addBox(new Box(vertices, DYNAMIC, 0.8, glm::vec3(0.5)));
-   
-   float secondVertices[] = {
-       -0.4,0.1,-0.1,  //Point A 0
-        -0.4,0.1,0.1,  //Point B 1
-        -0.2,0.1,-0.1, //Point C 2
-        -0.2,0.1,0.1, //Point D 3
+    shapeManager->addBox(new Box(vertices, KINEMETIC));
 
-        -0.4,-0.1,-0.1, //Point E 4
-        -0.4,-0.1,0.1,  //Point F 5
-        -0.2,-0.1,-0.1,  //Point G 6
-        -0.2,-0.1,0.1,   //Point H 7
+    float* secondVertices = new float[24] {
+        -0.1f, 1.6f, -0.1f,  //Point A 0
+            -0.1f, 1.6f, 0.1f,//Point B 1
+            0.1f, 1.6f, -0.1f,//Point C 2
+            0.1f, 1.6f, 0.1f, //Point D 3
+            -0.1f, 1.4f, -0.1f, //Point E 4
+            -0.1f, 1.4f, 0.1f,//Point F 5
+            0.1f, 1.4f, -0.1f,//Point G 6
+            0.1f, 1.4f, 0.1f//Point H 7
    };
-   shapeManager->addBox(new Box(secondVertices));
+   shapeManager->addBox(new Box(secondVertices, DYNAMIC));
+
+   float* thVertices = new float[24] {
+       -0.1f, 1.0f, -0.1f,  //Point A 0
+           -0.1f, 1.0f, 0.1f,//Point B 1
+           0.1f, 1.0f, -0.1f,//Point C 2
+           0.1f, 1.0f, 0.1f, //Point D 3
+           -0.1f, 0.8f, -0.1f, //Point E 4
+           -0.1f, 0.8f, 0.1f,//Point F 5
+           0.1f, 0.8f, -0.1f,//Point G 6
+           0.1f, 0.8f, 0.1f//Point H 7
+   };
+   shapeManager->addBox(new Box(thVertices, DYNAMIC));
+
+   float* floor = new float[24] {
+       -3.0f, -0.2f, -1.0f,  //Point A 0
+           -3.0f, -0.2f, 1.0f,//Point B 1
+           3.0f, -0.2f, -1.0f,//Point C 2
+           3.0f, -0.2f, 1.0f, //Point D 3
+           -3.0f, -0.3f, -1.0f, //Point E 4
+           -3.0f, -0.3f, 1.0f,//Point F 5
+           3.0f, -0.3f, -1.0f,//Point G 6
+           3.0f, -0.3f, 1.0f//Point H 7
+   };
+   shapeManager->addBox(new Box(floor, STATIC));
    shapeManager->rotateIn3D(1, glm::vec3(0, 1, 0));
 
    shapeManager->addSphere(new Sphere());

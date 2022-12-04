@@ -1,8 +1,6 @@
 #include "Box.h"
 
 Box::Box(float* vertexes, Collider_Type type, float weight, glm::vec3 velocity) : Collider(type, weight, velocity) {
-	
-	
 	//this->verticeAttributes = vertices;
 
 	/*
@@ -19,6 +17,11 @@ Box::Box(float* vertexes, Collider_Type type, float weight, glm::vec3 velocity) 
 	this->maxPoint = glm::vec3(vertexes[9], vertexes[10], vertexes[11]);
 	this->minPoint = glm::vec3(vertexes[12], vertexes[13], vertexes[14]);
 	this->center = (this->maxPoint + this->minPoint) * 0.5f;
+
+	for (int v = 0; v < 24; v++) {
+		vertexes[v] -= this->center[v % 3];
+	}
+
 	float vertices[] = {
 		vertexes[12], vertexes[13], vertexes[14], 0.0f, 0.0f, -1.0f,//E
 		vertexes[18], vertexes[19], vertexes[20], 0.0f, 0.0f, -1.0f,// G
@@ -89,77 +92,10 @@ Box::Box(float* vertexes, Collider_Type type, float weight, glm::vec3 velocity) 
 	this->translationMatrix[3][0] = this->center.x;
 	this->translationMatrix[3][1] = this->center.y;
 	this->translationMatrix[3][2] = this->center.z;
+
+	velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+	angularVelocity = glm::vec3(0.0f, 0.0f, 0.0f);
 }
-/*
-bool Box::isCollideWith(Box * box)
-{
-	return(this->maxPoint.x > box->minPoint.x &&
-		this->minPoint.x < box->maxPoint.x&&
-		this->maxPoint.y > box->minPoint.y &&
-		this->minPoint.y < box->maxPoint.y&&
-		this->maxPoint.z > box->minPoint.z &&
-		this->minPoint.z < box->maxPoint.z);
-}
-*/
-
-/*
-// Check if two OBBs are colliding
-bool Box::isCollideWith(Box* box)
-{
-	// Compute rotation matrix expressing box1 in box2's coordinate frame
-	glm::mat3 R = glm::mat3(box->getRotationMatrix()) * glm::transpose(glm::mat3(this->getRotationMatrix()));
-
-	glm::vec3 T = box->center - this->center;
-	// Bring translation into box2's coordinate frame
-	T = glm::vec3(glm::dot(T, glm::vec3(box->translationMatrix[0])), glm::dot(T, glm::vec3(box->translationMatrix[1])), glm::dot(T, glm::vec3(box->translationMatrix[2])));
-
-	// Compute common subexpressions. Add in an epsilon term to
-	// counteract arithmetic errors when two edges are parallel and
-	// their cross product is (near) null (see text for details)
-	glm::vec3 absR[3];
-	for (int i = 0; i < 3; i++)
-		for (int j = 0; j < 3; j++)
-			absR[i][j] = (R[i][j]) + FLT_EPSILON;
-
-	glm::vec3 extentThis = (this->maxPoint - this->minPoint) / 2.0f;
-	glm::vec3 extentOther = (box->maxPoint - box->minPoint) / 2.0f;
-
-	// Test axes L = A0, L = A1, L = A2
-	for (int i = 0; i < 3; i++)
-	{
-		float ra = extentOther[i];
-		float rb = glm::dot(extentThis, absR[i]);
-		if (abs(T[i]) > ra + rb) return false;
-	}
-
-	// Test axes L = B0, L = B1, L = B2
-	for (int i = 0; i < 3; i++)
-	{
-		float ra = extentOther[0] * absR[0][i] + extentOther[1] * absR[1][i] + extentOther[2] * absR[2][i];
-		float rb = extentThis[i];
-		if (abs(T[0] * R[0][i] + T[1] * R[1][i] + T[2] * R[2][i]) > ra + rb) return false;
-	}
-
-	// Test axis L = A0
-	float ra = extentOther[1] * absR[2][0] + extentOther[2] * absR[1][0];
-	float rb = extentThis[1] * absR[0][2] + extentThis[2] * absR[0][1];
-	if (abs(T[2] * R[1][0] - T[1] * R[2][0]) > ra + rb) return false;
-	
-	// Test axis L = A1
-	ra = extentOther[0] * absR[2][1] + extentOther[2] * absR[0][1];
-	rb = extentThis[0] * absR[1][2] + extentThis[2] * absR[1][0];
-	if (abs(T[2] * R[0][1] - T[0] * R[2][1]) > ra + rb) return false;
-	
-	// Test axis L = A2
-	ra = extentOther[0] * absR[1][2] + extentOther[1] * absR[0][2];
-	rb = extentThis[0] * absR[2][1] + extentThis[1] * absR[2][0];
-	if (abs(T[1] * R[0][2] - T[0] * R[1][2]) > ra + rb) return false;
-	
-	// Since no separating axis is found, the OBBs must be intersecting
-	return true;
-}
-
-*/
 
 bool Box::isCollideWith(Box* box)
 {
@@ -241,10 +177,6 @@ void Box::translation(float directionX, float directionY, float directionZ)
 	this->minPoint = glm::vec3(minPoint.x + dx, minPoint.y + dy, minPoint.z + dz);
 	this->maxPoint = glm::vec3(maxPoint.x + dx, maxPoint.y + dy, maxPoint.z + dz);
 	this->center = this->center + glm::vec3(dx, dy, dz);
-
-	cout << "Translation : C(" << getCenter().x << ", " << getCenter().y << ", " << getCenter().z << ")"
-		<< " ~ M(" << getMatrix()[3][0] << ", " << getMatrix()[3][1] << ", " << getMatrix()[3][2] << ")" << endl;
-
 }
 
 glm::vec3 Box::getCenter() {
