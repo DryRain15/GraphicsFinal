@@ -18,6 +18,7 @@ public:
 	void transformation(glm::mat3 newMatrix);
 	void setPosition(float dx, float dy, float dz);
 	glm::mat4 getRotationMatrix();
+	glm::mat4 getTranslationMatrix();
 };
 
 #endif

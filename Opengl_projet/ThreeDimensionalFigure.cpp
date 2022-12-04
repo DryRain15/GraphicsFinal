@@ -62,3 +62,9 @@ glm::mat4 ThreeDimensionalFigure::getRotationMatrix()
 {
 	return this->rotationMatrix;
 }
+
+
+glm::mat4 ThreeDimensionalFigure::getTranslationMatrix()
+{
+	return this->translationMatrix;
+}

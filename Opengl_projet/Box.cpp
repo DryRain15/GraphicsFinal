@@ -69,6 +69,7 @@ bool Box::isCollideWith(Box * box)
 }
 */
 
+/*
 // Check if two OBBs are colliding
 bool Box::isCollideWith(Box* box)
 {
@@ -124,6 +125,79 @@ bool Box::isCollideWith(Box* box)
 	// Since no separating axis is found, the OBBs must be intersecting
 	return true;
 }
+
+*/
+
+bool Box::isCollideWith(Box* box)
+{
+	// Compute the transformation matrix for each OBB
+	glm::mat3 R1 = this->getRotationMatrix();
+	glm::mat3 R2 = box->getRotationMatrix();
+	glm::mat3 R = R1 * glm::transpose(R2);
+
+	glm::mat4 tM1 = this->getTranslationMatrix();
+	glm::mat4 tM2 = box->getTranslationMatrix();
+	glm::vec3 t1 = glm::vec3(tM1[3][0], tM1[3][1], tM1[3][2]);
+	glm::vec3 t2 = glm::vec3(tM2[3][0], tM2[3][1], tM2[3][2]);
+	glm::vec3 t = t1 - t2;
+
+	// Compute the half-widths of each OBB along its local axes
+	glm::vec3 h1 = this->maxPoint - this->center;
+	glm::vec3 h2 = box->maxPoint - box->center;
+
+	// For each of the 3 axes of the OBBs
+	for (int i = 0; i < 3; i++)
+	{
+		// Compute the projection interval of the OBBs along the current axis
+		float r1 = glm::dot(h1, glm::abs(R[i]));
+		float r2 = glm::dot(h2, glm::abs(R[i]));
+		float r = glm::dot(t, glm::abs(R[i]));
+
+		// Check for OBB collision along the current axis
+		if (r > r1 + r2)
+		{
+			return false;
+		}
+	}
+
+	// For each of the 3 axes of the OBBs
+	for (int i = 0; i < 3; i++)
+	{
+		// Compute the projection interval of the OBBs along the current axis
+		float r1 = glm::dot(h1, glm::vec3(R[0][i], R[1][i], R[2][i]));
+		float r2 = glm::dot(h2, glm::vec3(R[0][i], R[1][i], R[2][i]));
+		float r = glm::dot(t, glm::vec3(R[0][i], R[1][i], R[2][i]));
+
+		// Check for OBB collision along the current axis
+		if (r > r1 + r2)
+		{
+			return false;
+		}
+	}
+
+	// For each of the 9 axes formed by the cross product of the axes of the OBBs
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			// Compute the projection interval of the OBBs along the current axis
+			glm::vec3 axis = glm::cross(R[i], R[j]);
+			float r1 = glm::dot(h1, glm::abs(axis));
+			float r2 = glm::dot(h2, glm::abs(axis));
+			float r = glm::dot(t, glm::abs(axis));
+
+			// Check for OBB collision along the current axis
+			if (r > r1 + r2)
+			{
+				return false;
+			}
+		}
+	}
+	
+	// No separating axis found, the OBBs must be intersecting
+	return true;
+}
+
 
 void Box::translation(float directionX, float directionY, float directionZ)
 {
