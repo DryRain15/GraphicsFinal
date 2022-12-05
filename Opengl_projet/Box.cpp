@@ -205,6 +205,7 @@ void Box::applyExternalMomentumAtPoint(glm::vec3 point, glm::vec3 momentum) {
 	// split momentum into two parts:
 	// one is the vector which is from point to center
 	// another is the vector which is perpendicular to the first one and will applied to angular momentum
+	
 	glm::vec3* result = new glm::vec3[2];
 	glm::vec3 distance = this->center- point;
 	glm::vec3 pointToCenterNormalized = getVelocityNormalized(distance);

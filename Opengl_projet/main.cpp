@@ -138,6 +138,10 @@ void addDefaultObjects() {
             shapeManager->addBox(new Box(getVertices(glm::vec3(i, 0.3f, j), glm::vec3(0.1f, 0.1f, 0.1f)), DYNAMIC));
         }
     }
+	
+    for (float k = 1.5f; k > 0.3f; k -= 0.4f) {
+        shapeManager->addBox(new Box(getVertices(glm::vec3(2, k, -1), glm::vec3(0.1f, 0.1f, 0.1f)), DYNAMIC));
+    }
 
    float* floor = new float[24] {
            -30.0f, -0.2f, -30.0f,  //Point A 0
